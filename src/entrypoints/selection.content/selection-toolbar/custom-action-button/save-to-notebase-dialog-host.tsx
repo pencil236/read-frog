@@ -21,6 +21,7 @@ import {
   replaceSelectionToolbarAction,
 } from "@/utils/custom-actions"
 import { i18n } from "@/utils/i18n"
+import { getStoredDirectoryLocation } from "@/utils/local-notebase"
 import { createColumnConfig } from "@/utils/local-notebase/render"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
 import { logger } from "@/utils/logger"
@@ -111,10 +112,11 @@ export function SaveToNotebaseDialogHost() {
       await setSelectionToolbarConfig(nextSelectionToolbar)
 
       closeDialog()
+      const location = await getStoredDirectoryLocation()
       toastManager.add({
         type: "success",
         title: i18n.t("action.saveToNotebaseSuccess"),
-        description: action.name,
+        description: location ? `${action.name} · ${location}` : action.name,
       })
       recordSuggestionAcceptedIfNeeded(action.name)
 

@@ -1593,6 +1593,8 @@ notebase:
     location: 儲存位置
     locationDescription: 在這台電腦上選擇一個資料夾。Read Frog 會以 JSON 檔案的形式在其中的 read-frog/ 目錄讀寫你的筆記庫。
     currentFolder: 目前資料夾
+    contentsTitle: 資料夾內容
+    pathHint: 基於隱私保護，瀏覽器不會向擴充功能提供完整路徑。上面的檔案真實存在於你選擇的資料夾中，位於其中的 read-frog/ 子資料夾。想查看完整路徑，可再次點「更換資料夾」，在系統彈出的選擇視窗中即可看到。
     removeFolder: 移除資料夾
     noFolderTitle: 尚未選擇資料夾
     noFolderDescription: 筆記庫目前儲存在擴充功能內建儲存中。選擇資料夾即可完全掌控你的資料。

@@ -6,6 +6,8 @@ import { toastManager } from "@/components/ui/base-ui/toast"
 import { i18n } from "@/utils/i18n"
 import {
   clearStoredDirectoryHandle,
+  ensureReadmeFile,
+  getReadFrogRoot,
   getStoredDirectoryHandle,
   pickAndPersistDirectory,
   supportsDirectoryAccess,
@@ -13,13 +15,46 @@ import {
 import { createDefaultLocalNotebaseStore } from "@/utils/local-notebase/repository"
 import { localNotebaseSnapshotSchema } from "@/utils/local-notebase/types"
 
+interface DirectoryContents {
+  files: string[]
+  notebaseFiles: string[]
+}
+
+async function readDirectoryContents(
+  root: FileSystemDirectoryHandle,
+): Promise<DirectoryContents | null> {
+  try {
+    const readFrogRoot = await getReadFrogRoot(root)
+    const files: string[] = []
+    const notebaseFiles: string[] = []
+    for await (const entry of readFrogRoot.values()) {
+      if (entry.kind === "file") {
+        files.push(entry.name)
+      } else if (entry.name === "notebases") {
+        for await (const child of entry.values()) {
+          if (child.kind === "file") {
+            notebaseFiles.push(child.name)
+          }
+        }
+      }
+    }
+    files.sort()
+    notebaseFiles.sort()
+    return { files, notebaseFiles }
+  } catch {
+    return null
+  }
+}
+
 export function StoragePage() {
   const [handleName, setHandleName] = useState<string | null>(null)
+  const [contents, setContents] = useState<DirectoryContents | null>(null)
   const [busy, setBusy] = useState(false)
 
   const refresh = useCallback(async () => {
     const handle = await getStoredDirectoryHandle()
     setHandleName(handle?.name ?? null)
+    setContents(handle ? await readDirectoryContents(handle) : null)
   }, [])
 
   useEffect(() => {
@@ -30,7 +65,10 @@ export function StoragePage() {
     setBusy(true)
     try {
       const handle = await pickAndPersistDirectory()
+      const readFrogRoot = await getReadFrogRoot(handle)
+      await ensureReadmeFile(readFrogRoot)
       setHandleName(handle.name)
+      setContents(await readDirectoryContents(handle))
       toastManager.add({
         type: "success",
         title: i18n.t("notebase.storage.directorySelected"),
@@ -52,6 +90,7 @@ export function StoragePage() {
   const handleClearDirectory = async () => {
     await clearStoredDirectoryHandle()
     setHandleName(null)
+    setContents(null)
   }
 
   const handleExport = async () => {
@@ -135,6 +174,37 @@ export function StoragePage() {
                 <AlertTitle>{i18n.t("notebase.storage.currentFolder")}</AlertTitle>
                 <AlertDescription>{handleName}</AlertDescription>
               </Alert>
+              {contents && (
+                <div className="w-full space-y-1 rounded-lg border bg-card p-3 font-mono text-xs">
+                  <p className="font-sans text-sm font-medium">
+                    {i18n.t("notebase.storage.contentsTitle")}
+                  </p>
+                  <p>📁 {handleName}/read-frog/</p>
+                  {contents.files.map((file) => (
+                    <p key={file} className="pl-4">
+                      {file}
+                    </p>
+                  ))}
+                  {contents.notebaseFiles.length > 0 && (
+                    <>
+                      <p className="pl-4">notebases/</p>
+                      {contents.notebaseFiles.slice(0, 20).map((file) => (
+                        <p key={file} className="pl-8">
+                          {file}
+                        </p>
+                      ))}
+                      {contents.notebaseFiles.length > 20 && (
+                        <p className="pl-8 text-muted-foreground">
+                          … +{contents.notebaseFiles.length - 20}
+                        </p>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+              <p className="w-full text-xs text-muted-foreground">
+                {i18n.t("notebase.storage.pathHint")}
+              </p>
               <Button type="button" variant="outline" size="sm" onClick={handleClearDirectory}>
                 {i18n.t("notebase.storage.removeFolder")}
               </Button>

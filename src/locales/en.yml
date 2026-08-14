@@ -1593,6 +1593,8 @@ notebase:
     location: Storage location
     locationDescription: Pick a folder on this computer. Read Frog reads and writes your notebases as JSON files inside read-frog/.
     currentFolder: Current folder
+    contentsTitle: Folder contents
+    pathHint: Browsers don't expose the full path to extensions for privacy. The files above really exist in the folder you picked, under its read-frog/ subfolder. To see the full path, click Change folder again and check the system picker.
     removeFolder: Remove folder
     noFolderTitle: No folder chosen yet
     noFolderDescription: Notebases are currently stored in the extension's built-in storage. Choose a folder to take full control of your data.

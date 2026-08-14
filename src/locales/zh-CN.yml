@@ -1593,6 +1593,8 @@ notebase:
     location: 存储位置
     locationDescription: 在这台电脑上选择一个文件夹。Read Frog 会以 JSON 文件的形式在其中的 read-frog/ 目录读写你的笔记库。
     currentFolder: 当前文件夹
+    contentsTitle: 文件夹内容
+    pathHint: 出于隐私保护，浏览器不会向扩展提供完整路径。上面的文件真实存在于你选择的文件夹中，位于其中的 read-frog/ 子文件夹。想查看完整路径，可再次点击「更换文件夹」，在系统弹出的选择窗口里就能看到。
     removeFolder: 移除文件夹
     noFolderTitle: 尚未选择文件夹
     noFolderDescription: 笔记库目前存储在扩展的内置存储中。选择一个文件夹即可完全掌控你的数据。

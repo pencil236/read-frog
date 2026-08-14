@@ -1,6 +1,7 @@
 import type { LocalNotebaseSnapshot, LocalNotebaseSummary } from "../types"
 import { LOCAL_NOTEBASE_DATA_VERSION, localNotebaseSnapshotSchema } from "../types"
 import {
+  ensureReadmeFile,
   getNotebasesDir,
   getReadFrogRoot,
   readJsonFile,
@@ -44,6 +45,7 @@ export class DirectoryLocalNotebaseStore {
   async saveSnapshot(snapshot: LocalNotebaseSnapshot): Promise<void> {
     const readFrogRoot = await getReadFrogRoot(this.root)
     const notebasesDir = await getNotebasesDir(this.root)
+    await ensureReadmeFile(readFrogRoot)
     await writeJsonFile(notebasesDir, `${snapshot.notebase.id}.json`, snapshot)
     await this.updateIndex(readFrogRoot, {
       id: snapshot.notebase.id,
