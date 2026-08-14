@@ -1500,3 +1500,190 @@ languages:
   wls: 瓦利斯語
   rar: 庫克群島毛利語
   hif: 斐濟印地語
+notebase:
+  title: 陪讀蛙筆記庫
+  nav:
+    notebases: 筆記庫
+    storage: 儲存
+  common:
+    back: 返回
+    save: 儲存
+    cancel: 取消
+    edit: 編輯
+    delete: 刪除
+    front: 正面
+    cardBack: 背面
+    operationFailed: 操作失敗
+    updateCardFailed: 更新卡片失敗
+  list:
+    title: 筆記庫
+    description: 查詞後儲存的內容都在這裡，全部存放在本機。
+    emptyTitle: 還沒有筆記庫
+    emptyDescription: 在任意網頁執行字典自訂 AI 指令，然後點「儲存到筆記庫」——第一次儲存會在這裡建立本機筆記庫。
+    localBadge: 本機
+    updated: 更新於
+    open: 開啟
+  columnType:
+    string: 文字
+    number: 數字
+    boolean: 布林
+    date: 日期
+    select: 下拉
+  filter:
+    contains: 包含
+    equals: 等於
+    notEquals: 不等於
+    isEmpty: 為空
+    isNotEmpty: 不為空
+  cardState:
+    new: 新卡片
+    learning: 學習中
+    review: 複習
+    relearning: 重新學習
+    buried: 已隱藏
+    suspended: 已暫停
+  detail:
+    titleFallback: 筆記庫
+    primaryBadge: 主欄
+    actions: 操作
+    emptyGroup: 空
+    templates: 模板
+    review: 複習
+    srs: SRS
+    addColumn: 欄位
+    addRow: 列
+    noViews: 沒有檢視
+    newView: 新增檢視
+    viewTable: 表格
+    viewKanban: 看板
+    viewGallery: 畫廊
+    viewSettings: 設定
+    rowCount: 顯示 $1 / $2 列
+    noColumns: 這個筆記庫還沒有欄位。新增一欄即可開始記錄。
+    viewSettingsTitle: 檢視設定
+    viewSettingsDescription: 篩選與排序會套用到此檢視的所有顯示模式。
+    name: 名稱
+    rename: 重新命名
+    filters: 篩選
+    addFilter: 新增篩選
+    noFilters: 尚無篩選條件。
+    sorts: 排序
+    addSort: 新增排序
+    noSorts: 尚無排序條件。
+    sortAscending: 升冪
+    sortDescending: 降冪
+    removeFilter: 移除篩選
+    removeSort: 移除排序
+    deleteView: 刪除檢視
+    done: 完成
+    editColumnTitle: 編輯欄位
+    addColumnTitle: 新增欄位
+    columnNamePlaceholder: 欄位名稱
+    defaultViewName: 檢視
+    editColumn: 編輯欄位
+    moveColumnLeft: 左移欄位
+    moveColumnRight: 右移欄位
+    deleteColumn: 刪除欄位
+    moveRowUp: 上移列
+    moveRowDown: 下移列
+    deleteRow: 刪除列
+  storage:
+    title: 儲存
+    description: 選擇本機筆記庫的存放位置。所有資料都保留在這台裝置上。
+    location: 儲存位置
+    locationDescription: 在這台電腦上選擇一個資料夾。Read Frog 會以 JSON 檔案的形式在其中的 read-frog/ 目錄讀寫你的筆記庫。
+    currentFolder: 目前資料夾
+    removeFolder: 移除資料夾
+    noFolderTitle: 尚未選擇資料夾
+    noFolderDescription: 筆記庫目前儲存在擴充功能內建儲存中。選擇資料夾即可完全掌控你的資料。
+    noFolderDescriptionFirefox: 目前瀏覽器不支援直接存取資料夾。資料儲存在擴充功能內建儲存中；可使用下方的匯出/匯入功能遷移。
+    changeFolder: 更換資料夾
+    chooseFolder: 選擇資料夾
+    backup: 備份
+    backupDescription: 將所有筆記庫匯出為單一 JSON 檔案，或匯入先前匯出的檔案。
+    exportJson: 匯出 JSON
+    importJson: 匯入 JSON
+    directorySelected: 已選擇資料夾
+    selectDirectoryFailed: 選擇資料夾失敗
+    exportFailed: 匯出失敗
+    imported: 已匯入 $1 個筆記庫
+    importFailed: 匯入失敗
+    invalidExportFile: 匯出檔案無效
+  templates:
+    title: 卡片模板
+    generateAll: 全部產生
+    addTemplate: 模板
+    noTemplates: 還沒有模板。建立一個模板即可把筆記列變成閃卡。
+    cardCount: $1 張卡片
+    generate: 產生
+    deleteTemplate: 刪除模板
+    cardsTitle: 卡片（$1）
+    noCards: 還沒有卡片。請先在上方模板中產生卡片。
+    dueAt: 到期
+    editTemplateTitle: 編輯模板
+    newTemplateTitle: 新增模板
+    templateDescription: 使用 {{ColumnName}} 佔位符，它們會被替換為每一列對應欄位的內容。
+    templateNamePlaceholder: 模板名稱
+    frontPattern: 正面模板
+    backPattern: 背面模板
+    editCardTitle: 編輯卡片
+    editCardDescription: 直接修改卡片的正面與背面內容。從模板重新產生會覆蓋這些修改。
+    deleteCardTitle: 刪除卡片？
+    deleteCardDescription: 這會刪除該卡片及其複習記錄。之後可隨時從對應的筆記列重新產生。
+    saveTemplateFailed: 儲存模板失敗
+    deleteTemplateFailed: 刪除模板失敗
+    noNewCards: 沒有可產生的新卡片
+    generatedCards: 已產生 $1 張卡片
+    generateCardsFailed: 產生卡片失敗
+    cardUpdated: 卡片已更新
+    cardDeleted: 卡片已刪除
+    deleteCardFailed: 刪除卡片失敗
+  review:
+    title: 複習
+    ratingAgain: 重來
+    ratingHard: 困難
+    ratingGood: 良好
+    ratingEasy: 簡單
+    newBadge: $1 張新卡
+    learningBadge: $1 張學習中
+    reviewBadge: $1 張複習
+    history: 歷史
+    start: 開始
+    recentReviews: 最近複習
+    noReviews: 還沒有複習記錄。
+    nothingDue: 目前沒有到期的卡片。產生卡片並儲存新筆記，即可累積複習佇列。
+    dueTodayOne: 今天有 $1 張卡片到期。
+    dueTodayMany: 今天有 $1 張卡片到期。
+    cardProgress: 第 $1 張，共 $2 張
+    suspend: 暫停
+    bury: 隱藏
+    showAnswer: 顯示答案
+    pressSpaceHint: 按空白鍵顯示答案
+    sessionComplete: 本次複習完成
+    sessionSummary: 你複習了 $1 張卡片。等下一批到期後再來複習。
+    undoLast: 復原上一次複習
+    reviewAgain: 再複習一輪
+    reviewCardFailed: 複習卡片失敗
+    lastReviewUndone: 已復原上一次複習
+    undoFailed: 復原複習失敗
+  srs:
+    title: SRS 設定
+    description: 調整此筆記庫中新卡片與複習的排程方式。
+    newPerDay: 每日新卡數
+    reviewsPerDay: 每日複習數
+    unlimited: "-1 表示不限量"
+    desiredRetention: 期望記憶保留率
+    retentionHint: 0.3 到 1.0；越高複習越多
+    maxInterval: 最大間隔（天）
+    leechThreshold: 頑固卡片門檻
+    learningSteps: 學習步長
+    relearningSteps: 重新學習步長
+    shortTerm: 短期排程
+    shortTermHint: 在長期間隔前套用（重新）學習步長
+    fuzz: 間隔隨機化
+    fuzzHint: 為長期間隔加入少量隨機性
+    saving: 儲存中...
+    invalidSteps: 學習步長無效
+    invalidStepsDescription: "步長使用時長格式，例如「1m」「10m」「1h」或「1d」，以逗號分隔。"
+    saved: SRS 設定已儲存
+    saveFailed: 儲存 SRS 設定失敗

@@ -1500,3 +1500,190 @@ languages:
   wls: 瓦利斯语
   rar: 拉罗汤加语
   hif: 斐济印地语
+notebase:
+  title: 陪读蛙笔记库
+  nav:
+    notebases: 笔记库
+    storage: 存储
+  common:
+    back: 返回
+    save: 保存
+    cancel: 取消
+    edit: 编辑
+    delete: 删除
+    front: 正面
+    cardBack: 背面
+    operationFailed: 操作失败
+    updateCardFailed: 更新卡片失败
+  list:
+    title: 笔记库
+    description: 词典查词保存的内容都在这里，全部存放在本地。
+    emptyTitle: 还没有笔记库
+    emptyDescription: 在任意网页运行词典自定义 AI 指令，然后点击「保存到笔记库」——第一次保存会在这里创建本地笔记库。
+    localBadge: 本地
+    updated: 更新于
+    open: 打开
+  columnType:
+    string: 文本
+    number: 数字
+    boolean: 布尔
+    date: 日期
+    select: 下拉
+  filter:
+    contains: 包含
+    equals: 等于
+    notEquals: 不等于
+    isEmpty: 为空
+    isNotEmpty: 不为空
+  cardState:
+    new: 新卡
+    learning: 学习中
+    review: 复习
+    relearning: 重新学习
+    buried: 已掩埋
+    suspended: 已挂起
+  detail:
+    titleFallback: 笔记库
+    primaryBadge: 主列
+    actions: 操作
+    emptyGroup: 空
+    templates: 模板
+    review: 复习
+    srs: SRS
+    addColumn: 列
+    addRow: 行
+    noViews: 没有视图
+    newView: 新建视图
+    viewTable: 表格
+    viewKanban: 看板
+    viewGallery: 画廊
+    viewSettings: 设置
+    rowCount: 显示 $1 / $2 行
+    noColumns: 这个笔记库还没有列。添加一列即可开始记录。
+    viewSettingsTitle: 视图设置
+    viewSettingsDescription: 筛选和排序对该视图的所有显示模式生效。
+    name: 名称
+    rename: 重命名
+    filters: 筛选
+    addFilter: 添加筛选
+    noFilters: 暂无筛选条件。
+    sorts: 排序
+    addSort: 添加排序
+    noSorts: 暂无排序条件。
+    sortAscending: 升序
+    sortDescending: 降序
+    removeFilter: 移除筛选
+    removeSort: 移除排序
+    deleteView: 删除视图
+    done: 完成
+    editColumnTitle: 编辑列
+    addColumnTitle: 添加列
+    columnNamePlaceholder: 列名称
+    defaultViewName: 视图
+    editColumn: 编辑列
+    moveColumnLeft: 左移列
+    moveColumnRight: 右移列
+    deleteColumn: 删除列
+    moveRowUp: 上移行
+    moveRowDown: 下移行
+    deleteRow: 删除行
+  storage:
+    title: 存储
+    description: 选择本地笔记库的存放位置。所有数据都保留在这台设备上。
+    location: 存储位置
+    locationDescription: 在这台电脑上选择一个文件夹。Read Frog 会以 JSON 文件的形式在其中的 read-frog/ 目录读写你的笔记库。
+    currentFolder: 当前文件夹
+    removeFolder: 移除文件夹
+    noFolderTitle: 尚未选择文件夹
+    noFolderDescription: 笔记库目前存储在扩展的内置存储中。选择一个文件夹即可完全掌控你的数据。
+    noFolderDescriptionFirefox: 当前浏览器不支持直接访问文件夹。数据存储在扩展的内置存储中；可使用下方的导出/导入功能迁移。
+    changeFolder: 更换文件夹
+    chooseFolder: 选择文件夹
+    backup: 备份
+    backupDescription: 将所有笔记库导出为一个 JSON 文件，或导入之前导出的文件。
+    exportJson: 导出 JSON
+    importJson: 导入 JSON
+    directorySelected: 已选择文件夹
+    selectDirectoryFailed: 选择文件夹失败
+    exportFailed: 导出失败
+    imported: 已导入 $1 个笔记库
+    importFailed: 导入失败
+    invalidExportFile: 导出文件无效
+  templates:
+    title: 卡片模板
+    generateAll: 全部生成
+    addTemplate: 模板
+    noTemplates: 还没有模板。创建一个模板即可把笔记行变成闪卡。
+    cardCount: $1 张卡片
+    generate: 生成
+    deleteTemplate: 删除模板
+    cardsTitle: 卡片（$1）
+    noCards: 还没有卡片。请先在上方模板中生成卡片。
+    dueAt: 到期
+    editTemplateTitle: 编辑模板
+    newTemplateTitle: 新建模板
+    templateDescription: 使用 {{ColumnName}} 占位符，它们会被替换为每一行对应列的内容。
+    templateNamePlaceholder: 模板名称
+    frontPattern: 正面模板
+    backPattern: 背面模板
+    editCardTitle: 编辑卡片
+    editCardDescription: 直接修改卡片的正面和背面内容。从模板重新生成会覆盖这些修改。
+    deleteCardTitle: 删除卡片？
+    deleteCardDescription: 这将删除该卡片及其复习记录。之后可以随时从对应的笔记行重新生成。
+    saveTemplateFailed: 保存模板失败
+    deleteTemplateFailed: 删除模板失败
+    noNewCards: 没有可生成的新卡片
+    generatedCards: 已生成 $1 张卡片
+    generateCardsFailed: 生成卡片失败
+    cardUpdated: 卡片已更新
+    cardDeleted: 卡片已删除
+    deleteCardFailed: 删除卡片失败
+  review:
+    title: 复习
+    ratingAgain: 重来
+    ratingHard: 困难
+    ratingGood: 良好
+    ratingEasy: 简单
+    newBadge: $1 张新卡
+    learningBadge: $1 张学习中
+    reviewBadge: $1 张复习
+    history: 历史
+    start: 开始
+    recentReviews: 最近复习
+    noReviews: 还没有复习记录。
+    nothingDue: 当前没有到期的卡片。生成卡片并保存新笔记，即可积累复习队列。
+    dueTodayOne: 今天有 $1 张卡片到期。
+    dueTodayMany: 今天有 $1 张卡片到期。
+    cardProgress: 第 $1 张，共 $2 张
+    suspend: 挂起
+    bury: 掩埋
+    showAnswer: 显示答案
+    pressSpaceHint: 按空格键显示答案
+    sessionComplete: 本次复习完成
+    sessionSummary: 你复习了 $1 张卡片。等下一批到期后再来复习。
+    undoLast: 撤销上一次复习
+    reviewAgain: 再复习一轮
+    reviewCardFailed: 复习卡片失败
+    lastReviewUndone: 已撤销上一次复习
+    undoFailed: 撤销复习失败
+  srs:
+    title: SRS 设置
+    description: 调整这个笔记库中新卡片和复习的排期方式。
+    newPerDay: 每日新卡数
+    reviewsPerDay: 每日复习数
+    unlimited: "-1 表示不限量"
+    desiredRetention: 期望记忆保持率
+    retentionHint: 0.3 到 1.0；越高复习越多
+    maxInterval: 最大间隔（天）
+    leechThreshold: 顽固卡片阈值
+    learningSteps: 学习步长
+    relearningSteps: 重新学习步长
+    shortTerm: 短期排期
+    shortTermHint: 在长期间隔前应用（重新）学习步长
+    fuzz: 间隔随机化
+    fuzzHint: 为长期间隔添加少量随机性
+    saving: 保存中...
+    invalidSteps: 学习步长无效
+    invalidStepsDescription: "步长使用时长格式，例如“1m”“10m”“1h”或“1d”，用逗号分隔。"
+    saved: SRS 设置已保存
+    saveFailed: 保存 SRS 设置失败

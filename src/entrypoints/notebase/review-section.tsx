@@ -15,6 +15,7 @@ import { Link, useParams } from "react-router"
 import { Badge } from "@/components/ui/base-ui/badge"
 import { Button } from "@/components/ui/base-ui/button"
 import { toastManager } from "@/components/ui/base-ui/toast"
+import { i18n } from "@/utils/i18n"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
 import { useAsyncData, useNotebaseSnapshot } from "./lib"
 import { SrsSettingsDialog } from "./srs-settings-dialog"
@@ -30,28 +31,39 @@ const RATING_SHORTCUTS: Record<ReviewRating, string> = {
   easy: "4",
 }
 
-const RATINGS: Array<{ value: ReviewRating; label: string; className: string }> = [
+const RATINGS: Array<{ value: ReviewRating; className: string }> = [
   {
     value: "again",
-    label: "Again",
     className: "bg-destructive/10 text-destructive hover:bg-destructive/20",
   },
   {
     value: "hard",
-    label: "Hard",
     className: "bg-amber-500/10 text-amber-700 hover:bg-amber-500/20 dark:text-amber-400",
   },
   {
     value: "good",
-    label: "Good",
     className: "bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 dark:text-emerald-400",
   },
   {
     value: "easy",
-    label: "Easy",
     className: "bg-sky-500/10 text-sky-700 hover:bg-sky-500/20 dark:text-sky-400",
   },
 ]
+
+function ratingLabel(rating: ReviewRating): string {
+  switch (rating) {
+    case "again":
+      return i18n.t("notebase.review.ratingAgain")
+    case "hard":
+      return i18n.t("notebase.review.ratingHard")
+    case "good":
+      return i18n.t("notebase.review.ratingGood")
+    case "easy":
+      return i18n.t("notebase.review.ratingEasy")
+    default:
+      return ""
+  }
+}
 
 const RATING_BADGE_CLASS: Record<ReviewRating, string> = {
   again: "bg-destructive/10 text-destructive",
@@ -79,7 +91,7 @@ function RatingCounters({ counts }: { counts: Record<ReviewRating, number> }) {
     <div className="flex items-center justify-center gap-2 text-xs">
       {RATINGS.map((rating) => (
         <Badge key={rating.value} variant="outline" className={RATING_BADGE_CLASS[rating.value]}>
-          {rating.label}: {counts[rating.value]}
+          {ratingLabel(rating.value)}: {counts[rating.value]}
         </Badge>
       ))}
     </div>
@@ -159,7 +171,7 @@ export function ReviewSection() {
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Failed to review card",
+        title: i18n.t("notebase.review.reviewCardFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     }
@@ -183,7 +195,7 @@ export function ReviewSection() {
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Failed to update card",
+        title: i18n.t("notebase.common.updateCardFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     }
@@ -197,13 +209,16 @@ export function ReviewSection() {
       const repository = await getLocalNotebaseRepository()
       await repository.rollbackReview(lastReviewedId)
       setLastReviewedId(null)
-      toastManager.add({ type: "success", title: "Last review undone" })
+      toastManager.add({
+        type: "success",
+        title: i18n.t("notebase.review.lastReviewUndone"),
+      })
       reloadStats()
       reload()
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Failed to undo review",
+        title: i18n.t("notebase.review.undoFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     }
@@ -263,15 +278,21 @@ export function ReviewSection() {
       <div className="flex flex-wrap items-center gap-3">
         <Button type="button" variant="ghost" size="sm" render={<Link to={`/notebases/${id}`} />}>
           <IconArrowLeft className="size-4" />
-          Back
+          {i18n.t("notebase.common.back")}
         </Button>
-        <h1 className="text-xl font-semibold">Review</h1>
+        <h1 className="text-xl font-semibold">{i18n.t("notebase.review.title")}</h1>
         <div className="ml-auto flex items-center gap-2">
           {dueStats && (
             <div className="flex items-center gap-1.5 text-xs">
-              <Badge variant="secondary">{dueStats.new} new</Badge>
-              <Badge variant="secondary">{dueStats.learning} learning</Badge>
-              <Badge variant="secondary">{dueStats.review} review</Badge>
+              <Badge variant="secondary">
+                {i18n.t("notebase.review.newBadge", [dueStats.new])}
+              </Badge>
+              <Badge variant="secondary">
+                {i18n.t("notebase.review.learningBadge", [dueStats.learning])}
+              </Badge>
+              <Badge variant="secondary">
+                {i18n.t("notebase.review.reviewBadge", [dueStats.review])}
+              </Badge>
             </div>
           )}
           <Button
@@ -281,10 +302,10 @@ export function ReviewSection() {
             onClick={() => setShowHistory((value) => !value)}
           >
             <IconHistory className="size-4" />
-            History
+            {i18n.t("notebase.review.history")}
           </Button>
           <Button type="button" variant="outline" size="sm" onClick={() => setSrsOpen(true)}>
-            SRS
+            {i18n.t("notebase.detail.srs")}
           </Button>
           <Button
             type="button"
@@ -294,16 +315,16 @@ export function ReviewSection() {
             onClick={startReview}
           >
             <IconPlayerPlay className="size-4" />
-            Start
+            {i18n.t("notebase.review.start")}
           </Button>
         </div>
       </div>
 
       {showHistory && (
         <div className="rounded-lg border bg-card p-4">
-          <p className="mb-2 text-sm font-medium">Recent reviews</p>
+          <p className="mb-2 text-sm font-medium">{i18n.t("notebase.review.recentReviews")}</p>
           {revlogs.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No reviews yet.</p>
+            <p className="text-sm text-muted-foreground">{i18n.t("notebase.review.noReviews")}</p>
           ) : (
             <div className="space-y-1.5">
               {revlogs.slice(0, 30).map((revlog) => {
@@ -318,7 +339,7 @@ export function ReviewSection() {
                       </p>
                     </div>
                     <Badge variant="outline" className={RATING_BADGE_CLASS[revlog.rating]}>
-                      {revlog.rating}
+                      {ratingLabel(revlog.rating)}
                     </Badge>
                   </div>
                 )
@@ -331,17 +352,17 @@ export function ReviewSection() {
       {queue === null && (
         <p className="text-sm text-muted-foreground">
           {dueCards.length === 0
-            ? "Nothing due right now. Generate cards and save new notes to build your review queue."
-            : `${dueCards.length} card${dueCards.length === 1 ? "" : "s"} due today.`}
+            ? i18n.t("notebase.review.nothingDue")
+            : dueCards.length === 1
+              ? i18n.t("notebase.review.dueTodayOne", [dueCards.length])
+              : i18n.t("notebase.review.dueTodayMany", [dueCards.length])}
         </p>
       )}
 
       {queue !== null && !completed && currentCard && (
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>
-              Card {index + 1} of {queue.length}
-            </span>
+            <span>{i18n.t("notebase.review.cardProgress", [index + 1, queue.length])}</span>
             <div className="flex items-center gap-2">
               <Button
                 type="button"
@@ -350,7 +371,7 @@ export function ReviewSection() {
                 onClick={() => void setCardStatus("suspend", true)}
               >
                 <IconPlayerPause className="size-4" />
-                Suspend
+                {i18n.t("notebase.review.suspend")}
               </Button>
               <Button
                 type="button"
@@ -359,7 +380,7 @@ export function ReviewSection() {
                 onClick={() => void setCardStatus("bury", true)}
               >
                 <IconEyeOff className="size-4" />
-                Bury
+                {i18n.t("notebase.review.bury")}
               </Button>
             </div>
           </div>
@@ -387,10 +408,10 @@ export function ReviewSection() {
           {!revealed ? (
             <div className="flex flex-col items-center gap-2">
               <Button type="button" variant="brand" onClick={() => setRevealed(true)}>
-                Show answer
+                {i18n.t("notebase.review.showAnswer")}
               </Button>
               <p className="text-xs text-muted-foreground">
-                Press <kbd className="rounded border bg-muted px-1">Space</kbd> to reveal
+                {i18n.t("notebase.review.pressSpaceHint")}
               </p>
             </div>
           ) : (
@@ -403,7 +424,7 @@ export function ReviewSection() {
                     className={rating.className}
                     onClick={() => void rateCard(rating.value)}
                   >
-                    {rating.label}
+                    {ratingLabel(rating.value)}
                     <kbd className="ml-1 rounded border border-current/30 bg-black/5 px-1 text-xs dark:bg-white/10">
                       {RATING_SHORTCUTS[rating.value]}
                     </kbd>
@@ -418,18 +439,18 @@ export function ReviewSection() {
 
       {completed && (
         <div className="space-y-4 rounded-xl border bg-card p-6 text-center">
-          <p className="font-medium">Session complete</p>
+          <p className="font-medium">{i18n.t("notebase.review.sessionComplete")}</p>
           <p className="text-sm text-muted-foreground">
-            You reviewed {queue?.length ?? 0} cards. Come back when the next ones are due.
+            {i18n.t("notebase.review.sessionSummary", [queue?.length ?? 0])}
           </p>
           <RatingCounters counts={ratingCounts} />
           <div className="flex justify-center gap-2">
             <Button type="button" variant="outline" size="sm" onClick={rollbackLast}>
               <IconRotate className="size-4" />
-              Undo last review
+              {i18n.t("notebase.review.undoLast")}
             </Button>
             <Button type="button" variant="brand" size="sm" onClick={startReview}>
-              Review again
+              {i18n.t("notebase.review.reviewAgain")}
             </Button>
           </div>
         </div>

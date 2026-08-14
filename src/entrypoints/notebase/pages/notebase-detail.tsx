@@ -36,6 +36,7 @@ import {
   SelectValue,
 } from "@/components/ui/base-ui/select"
 import { toastManager } from "@/components/ui/base-ui/toast"
+import { i18n } from "@/utils/i18n"
 import { createColumnConfig } from "@/utils/local-notebase/render"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
 import { formatCellValue, useNotebaseSnapshot } from "../lib"
@@ -148,12 +149,46 @@ function sortRows(
 function uniqueViewName(views: Array<{ name: string }>): string {
   const names = new Set(views.map((view) => view.name))
   let index = views.length + 1
-  let name = `View ${index}`
+  let name = `${i18n.t("notebase.detail.defaultViewName")} ${index}`
   while (names.has(name)) {
     index += 1
-    name = `View ${index}`
+    name = `${i18n.t("notebase.detail.defaultViewName")} ${index}`
   }
   return name
+}
+
+function columnTypeLabel(type: (typeof COLUMN_TYPES)[number]): string {
+  return i18n.t(`notebase.columnType.${type}`)
+}
+
+function filterOperatorLabel(operator: FilterOperator): string {
+  switch (operator) {
+    case "contains":
+      return i18n.t("notebase.filter.contains")
+    case "equals":
+      return i18n.t("notebase.filter.equals")
+    case "not_equals":
+      return i18n.t("notebase.filter.notEquals")
+    case "is_empty":
+      return i18n.t("notebase.filter.isEmpty")
+    case "is_not_empty":
+      return i18n.t("notebase.filter.isNotEmpty")
+    default:
+      return operator
+  }
+}
+
+function viewTypeLabel(type: LocalNotebaseViewType): string {
+  switch (type) {
+    case "table":
+      return i18n.t("notebase.detail.viewTable")
+    case "kanban":
+      return i18n.t("notebase.detail.viewKanban")
+    case "gallery":
+      return i18n.t("notebase.detail.viewGallery")
+    default:
+      return type
+  }
 }
 
 function CellEditor({
@@ -253,7 +288,7 @@ export function NotebaseDetailPage() {
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Operation failed",
+        title: i18n.t("notebase.common.operationFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     }
@@ -269,7 +304,10 @@ export function NotebaseDetailPage() {
     }
     void run(async () => {
       const repo = await getLocalNotebaseRepository()
-      const view = await repo.createView(id, { name: "View 1", type })
+      const view = await repo.createView(id, {
+        name: `${i18n.t("notebase.detail.defaultViewName")} 1`,
+        type,
+      })
       setActiveViewId(view.id)
     })
   }
@@ -283,7 +321,7 @@ export function NotebaseDetailPage() {
   }
 
   const openViewSettings = () => {
-    setViewName(activeView?.name ?? "View")
+    setViewName(activeView?.name ?? i18n.t("notebase.detail.defaultViewName"))
     setViewDialogOpen(true)
   }
 
@@ -376,13 +414,15 @@ export function NotebaseDetailPage() {
               >
                 <div className="flex items-center gap-1.5">
                   <span className="truncate">{column.name}</span>
-                  {column.isPrimary && <Badge variant="outline">primary</Badge>}
+                  {column.isPrimary && (
+                    <Badge variant="outline">{i18n.t("notebase.detail.primaryBadge")}</Badge>
+                  )}
                   <div className="ml-auto flex items-center gap-0.5">
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon-sm"
-                      aria-label="Edit column"
+                      aria-label={i18n.t("notebase.detail.editColumn")}
                       onClick={() => openEditColumn(column)}
                     >
                       <IconEdit className="size-3.5" />
@@ -391,7 +431,7 @@ export function NotebaseDetailPage() {
                       type="button"
                       variant="ghost"
                       size="icon-sm"
-                      aria-label="Move column left"
+                      aria-label={i18n.t("notebase.detail.moveColumnLeft")}
                       disabled={column.position === 0}
                       onClick={() =>
                         void run(async () => {
@@ -407,7 +447,7 @@ export function NotebaseDetailPage() {
                       type="button"
                       variant="ghost"
                       size="icon-sm"
-                      aria-label="Move column right"
+                      aria-label={i18n.t("notebase.detail.moveColumnRight")}
                       disabled={column.position === columns.length - 1}
                       onClick={() =>
                         void run(async () => {
@@ -423,7 +463,7 @@ export function NotebaseDetailPage() {
                       type="button"
                       variant="ghost"
                       size="icon-sm"
-                      aria-label="Delete column"
+                      aria-label={i18n.t("notebase.detail.deleteColumn")}
                       disabled={column.isPrimary}
                       onClick={() =>
                         void run(async () => {
@@ -438,7 +478,9 @@ export function NotebaseDetailPage() {
                 </div>
               </th>
             ))}
-            <th className="w-24 px-3 py-2 text-left font-medium">Actions</th>
+            <th className="w-24 px-3 py-2 text-left font-medium">
+              {i18n.t("notebase.detail.actions")}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -464,7 +506,7 @@ export function NotebaseDetailPage() {
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label="Move row up"
+                    aria-label={i18n.t("notebase.detail.moveRowUp")}
                     disabled={rowIndex === 0}
                     onClick={() =>
                       void run(async () => {
@@ -480,7 +522,7 @@ export function NotebaseDetailPage() {
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label="Move row down"
+                    aria-label={i18n.t("notebase.detail.moveRowDown")}
                     disabled={rowIndex === displayRows.length - 1}
                     onClick={() =>
                       void run(async () => {
@@ -496,7 +538,7 @@ export function NotebaseDetailPage() {
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label="Delete row"
+                    aria-label={i18n.t("notebase.detail.deleteRow")}
                     onClick={() =>
                       void run(async () => {
                         const repo = await getLocalNotebaseRepository()
@@ -519,8 +561,8 @@ export function NotebaseDetailPage() {
     const groups = new Map<string, typeof displayRows>()
     for (const row of displayRows) {
       const key = primaryColumn
-        ? formatCellValue(row.cells[primaryColumn.name]) || "Empty"
-        : "Empty"
+        ? formatCellValue(row.cells[primaryColumn.name]) || i18n.t("notebase.detail.emptyGroup")
+        : i18n.t("notebase.detail.emptyGroup")
       groups.set(key, [...(groups.get(key) ?? []), row])
     }
     return (
@@ -571,9 +613,11 @@ export function NotebaseDetailPage() {
       <div className="flex flex-wrap items-center gap-3">
         <Button type="button" variant="ghost" size="sm" render={<Link to="/" />}>
           <IconArrowLeft className="size-4" />
-          Notebases
+          {i18n.t("notebase.nav.notebases")}
         </Button>
-        <h1 className="text-xl font-semibold">{snapshot?.notebase.name ?? "Notebase"}</h1>
+        <h1 className="text-xl font-semibold">
+          {snapshot?.notebase.name ?? i18n.t("notebase.detail.titleFallback")}
+        </h1>
         <div className="ml-auto flex flex-wrap items-center gap-2">
           <Button
             type="button"
@@ -581,7 +625,7 @@ export function NotebaseDetailPage() {
             size="sm"
             render={<Link to={`/notebases/${id}/templates`} />}
           >
-            Templates
+            {i18n.t("notebase.detail.templates")}
           </Button>
           <Button
             type="button"
@@ -589,14 +633,14 @@ export function NotebaseDetailPage() {
             size="sm"
             render={<Link to={`/notebases/${id}/review`} />}
           >
-            Review
+            {i18n.t("notebase.detail.review")}
           </Button>
           <Button type="button" variant="outline" size="sm" onClick={() => setSrsOpen(true)}>
-            SRS
+            {i18n.t("notebase.detail.srs")}
           </Button>
           <Button type="button" variant="outline" size="sm" onClick={openCreateColumn}>
             <IconPlus className="size-4" />
-            Column
+            {i18n.t("notebase.detail.addColumn")}
           </Button>
           <Button
             type="button"
@@ -610,7 +654,7 @@ export function NotebaseDetailPage() {
             }
           >
             <IconPlus className="size-4" />
-            Row
+            {i18n.t("notebase.detail.addRow")}
           </Button>
         </div>
       </div>
@@ -626,7 +670,7 @@ export function NotebaseDetailPage() {
           }}
         >
           <SelectTrigger className="w-44">
-            <SelectValue placeholder="No views" />
+            <SelectValue placeholder={i18n.t("notebase.detail.noViews")} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -640,14 +684,14 @@ export function NotebaseDetailPage() {
         </Select>
         <Button type="button" variant="outline" size="sm" onClick={createView}>
           <IconPlus className="size-4" />
-          New view
+          {i18n.t("notebase.detail.newView")}
         </Button>
         <Select<LocalNotebaseViewType>
           value={viewType}
           items={[
-            { value: "table", label: "Table" },
-            { value: "kanban", label: "Kanban" },
-            { value: "gallery", label: "Gallery" },
+            { value: "table", label: viewTypeLabel("table") },
+            { value: "kanban", label: viewTypeLabel("kanban") },
+            { value: "gallery", label: viewTypeLabel("gallery") },
           ]}
           onValueChange={(value) => {
             if (value) {
@@ -656,13 +700,13 @@ export function NotebaseDetailPage() {
           }}
         >
           <SelectTrigger className="w-32">
-            <SelectValue>{viewType}</SelectValue>
+            <SelectValue>{viewTypeLabel(viewType)}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="table">Table</SelectItem>
-              <SelectItem value="kanban">Kanban</SelectItem>
-              <SelectItem value="gallery">Gallery</SelectItem>
+              <SelectItem value="table">{viewTypeLabel("table")}</SelectItem>
+              <SelectItem value="kanban">{viewTypeLabel("kanban")}</SelectItem>
+              <SelectItem value="gallery">{viewTypeLabel("gallery")}</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -674,11 +718,11 @@ export function NotebaseDetailPage() {
           onClick={openViewSettings}
         >
           <IconSettings className="size-4" />
-          Settings
+          {i18n.t("notebase.detail.viewSettings")}
         </Button>
         {activeView && (
           <span className="text-xs text-muted-foreground">
-            {displayRows.length}/{rows.length} rows
+            {i18n.t("notebase.detail.rowCount", [displayRows.length, rows.length])}
           </span>
         )}
       </div>
@@ -688,9 +732,7 @@ export function NotebaseDetailPage() {
       {viewType === "gallery" && renderGallery()}
 
       {columns.length === 0 && (
-        <p className="text-sm text-muted-foreground">
-          This notebase has no columns yet. Add one to start entering notes.
-        </p>
+        <p className="text-sm text-muted-foreground">{i18n.t("notebase.detail.noColumns")}</p>
       )}
 
       <Dialog
@@ -703,25 +745,25 @@ export function NotebaseDetailPage() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>View settings</DialogTitle>
+            <DialogTitle>{i18n.t("notebase.detail.viewSettingsTitle")}</DialogTitle>
             <DialogDescription>
-              Filters and sorts apply to every display mode of this view.
+              {i18n.t("notebase.detail.viewSettingsDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="flex items-end gap-2">
               <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium">Name</p>
+                <p className="text-sm font-medium">{i18n.t("notebase.detail.name")}</p>
                 <Input value={viewName} onChange={(event) => setViewName(event.target.value)} />
               </div>
               <Button type="button" variant="brand" onClick={saveViewName}>
-                Rename
+                {i18n.t("notebase.detail.rename")}
               </Button>
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">Filters</p>
+                <p className="text-sm font-medium">{i18n.t("notebase.detail.filters")}</p>
                 <Button
                   type="button"
                   variant="outline"
@@ -739,11 +781,13 @@ export function NotebaseDetailPage() {
                   }
                 >
                   <IconPlus className="size-4" />
-                  Add filter
+                  {i18n.t("notebase.detail.addFilter")}
                 </Button>
               </div>
               {viewFilters.length === 0 && (
-                <p className="text-xs text-muted-foreground">No filters.</p>
+                <p className="text-xs text-muted-foreground">
+                  {i18n.t("notebase.detail.noFilters")}
+                </p>
               )}
               {viewFilters.map((filter, index) => (
                 // oxlint-disable-next-line react/no-array-index-key -- filters have no stable id in the persisted model
@@ -778,7 +822,7 @@ export function NotebaseDetailPage() {
                     value={filter.operator}
                     items={FILTER_OPERATORS.map((operator) => ({
                       value: operator,
-                      label: operator,
+                      label: filterOperatorLabel(operator),
                     }))}
                     onValueChange={(value) => {
                       if (value) {
@@ -791,13 +835,13 @@ export function NotebaseDetailPage() {
                     }}
                   >
                     <SelectTrigger className="w-36">
-                      <SelectValue />
+                      <SelectValue>{filterOperatorLabel(filter.operator)}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
                         {FILTER_OPERATORS.map((operator) => (
                           <SelectItem key={operator} value={operator}>
-                            {operator}
+                            {filterOperatorLabel(operator)}
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -820,7 +864,7 @@ export function NotebaseDetailPage() {
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label="Remove filter"
+                    aria-label={i18n.t("notebase.detail.removeFilter")}
                     onClick={() =>
                       updateActiveViewFilters(
                         viewFilters.filter((_item, itemIndex) => itemIndex !== index),
@@ -835,7 +879,7 @@ export function NotebaseDetailPage() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">Sorts</p>
+                <p className="text-sm font-medium">{i18n.t("notebase.detail.sorts")}</p>
                 <Button
                   type="button"
                   variant="outline"
@@ -849,10 +893,12 @@ export function NotebaseDetailPage() {
                   }
                 >
                   <IconPlus className="size-4" />
-                  Add sort
+                  {i18n.t("notebase.detail.addSort")}
                 </Button>
               </div>
-              {viewSorts.length === 0 && <p className="text-xs text-muted-foreground">No sorts.</p>}
+              {viewSorts.length === 0 && (
+                <p className="text-xs text-muted-foreground">{i18n.t("notebase.detail.noSorts")}</p>
+              )}
               {viewSorts.map((sort, index) => (
                 // oxlint-disable-next-line react/no-array-index-key -- sorts have no stable id in the persisted model
                 <div key={index} className="flex items-center gap-2">
@@ -885,8 +931,8 @@ export function NotebaseDetailPage() {
                   <Select<"asc" | "desc">
                     value={sort.direction}
                     items={[
-                      { value: "asc", label: "Ascending" },
-                      { value: "desc", label: "Descending" },
+                      { value: "asc", label: i18n.t("notebase.detail.sortAscending") },
+                      { value: "desc", label: i18n.t("notebase.detail.sortDescending") },
                     ]}
                     onValueChange={(value) => {
                       if (value) {
@@ -903,8 +949,12 @@ export function NotebaseDetailPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="asc">Ascending</SelectItem>
-                        <SelectItem value="desc">Descending</SelectItem>
+                        <SelectItem value="asc">
+                          {i18n.t("notebase.detail.sortAscending")}
+                        </SelectItem>
+                        <SelectItem value="desc">
+                          {i18n.t("notebase.detail.sortDescending")}
+                        </SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -912,7 +962,7 @@ export function NotebaseDetailPage() {
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    aria-label="Remove sort"
+                    aria-label={i18n.t("notebase.detail.removeSort")}
                     onClick={() =>
                       updateActiveViewSorts(
                         viewSorts.filter((_item, itemIndex) => itemIndex !== index),
@@ -933,10 +983,10 @@ export function NotebaseDetailPage() {
               onClick={deleteActiveView}
             >
               <IconTrash className="size-4" />
-              Delete view
+              {i18n.t("notebase.detail.deleteView")}
             </Button>
             <Button type="button" variant="brand" onClick={() => setViewDialogOpen(false)}>
-              Done
+              {i18n.t("notebase.detail.done")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -953,18 +1003,23 @@ export function NotebaseDetailPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {columnDialog?.mode === "edit" ? "Edit column" : "Add column"}
+              {columnDialog?.mode === "edit"
+                ? i18n.t("notebase.detail.editColumnTitle")
+                : i18n.t("notebase.detail.addColumnTitle")}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
             <Input
-              placeholder="Column name"
+              placeholder={i18n.t("notebase.detail.columnNamePlaceholder")}
               value={columnName}
               onChange={(event) => setColumnName(event.target.value)}
             />
             <Select<(typeof COLUMN_TYPES)[number]>
               value={columnType}
-              items={COLUMN_TYPES.map((type) => ({ value: type, label: type }))}
+              items={COLUMN_TYPES.map((type) => ({
+                value: type,
+                label: columnTypeLabel(type),
+              }))}
               onValueChange={(value) => {
                 if (value) {
                   setColumnType(value)
@@ -972,13 +1027,13 @@ export function NotebaseDetailPage() {
               }}
             >
               <SelectTrigger className="w-full">
-                <SelectValue />
+                <SelectValue>{columnTypeLabel(columnType)}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   {COLUMN_TYPES.map((type) => (
                     <SelectItem key={type} value={type}>
-                      {type}
+                      {columnTypeLabel(type)}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -992,7 +1047,7 @@ export function NotebaseDetailPage() {
               disabled={!columnName.trim()}
               onClick={saveColumn}
             >
-              Save
+              {i18n.t("notebase.common.save")}
             </Button>
           </DialogFooter>
         </DialogContent>

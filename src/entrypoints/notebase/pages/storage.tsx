@@ -3,6 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/base-ui/ale
 import { Button } from "@/components/ui/base-ui/button"
 import { Field, FieldContent, FieldDescription, FieldTitle } from "@/components/ui/base-ui/field"
 import { toastManager } from "@/components/ui/base-ui/toast"
+import { i18n } from "@/utils/i18n"
 import {
   clearStoredDirectoryHandle,
   getStoredDirectoryHandle,
@@ -30,14 +31,17 @@ export function StoragePage() {
     try {
       const handle = await pickAndPersistDirectory()
       setHandleName(handle.name)
-      toastManager.add({ type: "success", title: "Directory selected" })
+      toastManager.add({
+        type: "success",
+        title: i18n.t("notebase.storage.directorySelected"),
+      })
     } catch (error) {
       if (error instanceof Error && error.name === "AbortError") {
         return
       }
       toastManager.add({
         type: "error",
-        title: "Failed to select directory",
+        title: i18n.t("notebase.storage.selectDirectoryFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     } finally {
@@ -74,7 +78,7 @@ export function StoragePage() {
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Export failed",
+        title: i18n.t("notebase.storage.exportFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     } finally {
@@ -89,18 +93,21 @@ export function StoragePage() {
       const parsed = JSON.parse(text) as { notebases?: unknown[] }
       const notebases = parsed.notebases
       if (!Array.isArray(notebases)) {
-        throw new Error("Invalid export file")
+        throw new Error(i18n.t("notebase.storage.invalidExportFile"))
       }
       const store = await createDefaultLocalNotebaseStore()
       for (const raw of notebases) {
         const snapshot = localNotebaseSnapshotSchema.parse(raw)
         await store.saveSnapshot(snapshot)
       }
-      toastManager.add({ type: "success", title: `Imported ${notebases.length} notebases` })
+      toastManager.add({
+        type: "success",
+        title: i18n.t("notebase.storage.imported", [notebases.length]),
+      })
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Import failed",
+        title: i18n.t("notebase.storage.importFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     } finally {
@@ -111,36 +118,34 @@ export function StoragePage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <h1 className="text-xl font-semibold">Storage</h1>
-        <p className="text-sm text-muted-foreground">
-          Choose where your local notebases live. All data stays on this device.
-        </p>
+        <h1 className="text-xl font-semibold">{i18n.t("notebase.storage.title")}</h1>
+        <p className="text-sm text-muted-foreground">{i18n.t("notebase.storage.description")}</p>
       </div>
 
       <Field className="gap-3 rounded-xl border border-dashed bg-muted/10 p-4">
-        <FieldTitle>Storage location</FieldTitle>
+        <FieldTitle>{i18n.t("notebase.storage.location")}</FieldTitle>
         <FieldDescription>
-          Pick a folder on this computer. Read Frog reads and writes your notebases as JSON files
-          inside <code className="rounded bg-muted px-1">read-frog/</code>.
+          {i18n.t("notebase.storage.locationDescription")}{" "}
+          <code className="rounded bg-muted px-1">read-frog/</code>
         </FieldDescription>
         <FieldContent className="flex flex-wrap items-center gap-2">
           {handleName ? (
             <>
               <Alert className="w-full">
-                <AlertTitle>Current folder</AlertTitle>
+                <AlertTitle>{i18n.t("notebase.storage.currentFolder")}</AlertTitle>
                 <AlertDescription>{handleName}</AlertDescription>
               </Alert>
               <Button type="button" variant="outline" size="sm" onClick={handleClearDirectory}>
-                Remove folder
+                {i18n.t("notebase.storage.removeFolder")}
               </Button>
             </>
           ) : (
             <Alert className="w-full">
-              <AlertTitle>No folder chosen yet</AlertTitle>
+              <AlertTitle>{i18n.t("notebase.storage.noFolderTitle")}</AlertTitle>
               <AlertDescription>
                 {supportsDirectoryAccess()
-                  ? "Notebases are currently stored in the extension's built-in storage. Choose a folder to take full control of your data."
-                  : "This browser does not support direct folder access. Data is stored in the extension's built-in storage; use export/import below to move it."}
+                  ? i18n.t("notebase.storage.noFolderDescription")
+                  : i18n.t("notebase.storage.noFolderDescriptionFirefox")}
               </AlertDescription>
             </Alert>
           )}
@@ -152,24 +157,24 @@ export function StoragePage() {
               disabled={busy}
               onClick={handlePickDirectory}
             >
-              {handleName ? "Change folder" : "Choose folder"}
+              {handleName
+                ? i18n.t("notebase.storage.changeFolder")
+                : i18n.t("notebase.storage.chooseFolder")}
             </Button>
           )}
         </FieldContent>
       </Field>
 
       <Field className="gap-3 rounded-xl border border-dashed bg-muted/10 p-4">
-        <FieldTitle>Backup</FieldTitle>
-        <FieldDescription>
-          Export all notebases to a single JSON file, or import a previously exported file.
-        </FieldDescription>
+        <FieldTitle>{i18n.t("notebase.storage.backup")}</FieldTitle>
+        <FieldDescription>{i18n.t("notebase.storage.backupDescription")}</FieldDescription>
         <FieldContent className="flex flex-wrap items-center gap-2">
           <Button type="button" variant="outline" size="sm" disabled={busy} onClick={handleExport}>
-            Export JSON
+            {i18n.t("notebase.storage.exportJson")}
           </Button>
           <label className="cursor-pointer">
             <span className="inline-flex h-8 items-center rounded-md border border-input px-2.5 text-sm shadow-xs transition-colors hover:bg-muted">
-              Import JSON
+              {i18n.t("notebase.storage.importJson")}
             </span>
             <input
               type="file"

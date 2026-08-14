@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/base-ui/input"
 import { Textarea } from "@/components/ui/base-ui/textarea"
 import { toastManager } from "@/components/ui/base-ui/toast"
+import { i18n } from "@/utils/i18n"
 import { renderPattern } from "@/utils/local-notebase/render"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
 import { useNotebaseSnapshot } from "./lib"
@@ -24,12 +25,12 @@ type CardDialogState = { mode: "edit"; cardId: string } | { mode: "delete"; card
 
 function cardStateLabel(card: LocalCard): string {
   if (card.scheduleStatus === "buried") {
-    return "buried"
+    return i18n.t("notebase.cardState.buried")
   }
   if (card.scheduleStatus === "suspended") {
-    return "suspended"
+    return i18n.t("notebase.cardState.suspended")
   }
-  return card.state
+  return i18n.t(`notebase.cardState.${card.state}`)
 }
 
 export function TemplatesSection() {
@@ -104,7 +105,7 @@ export function TemplatesSection() {
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Failed to save template",
+        title: i18n.t("notebase.templates.saveTemplateFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     } finally {
@@ -120,7 +121,7 @@ export function TemplatesSection() {
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Failed to delete template",
+        title: i18n.t("notebase.templates.deleteTemplateFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     }
@@ -132,13 +133,16 @@ export function TemplatesSection() {
       const { created } = await repository.generateCards(id, templateId)
       toastManager.add({
         type: "success",
-        title: created === 0 ? "No new cards to generate" : `Generated ${created} cards`,
+        title:
+          created === 0
+            ? i18n.t("notebase.templates.noNewCards")
+            : i18n.t("notebase.templates.generatedCards", [created]),
       })
       reload()
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Failed to generate cards",
+        title: i18n.t("notebase.templates.generateCardsFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     }
@@ -162,13 +166,13 @@ export function TemplatesSection() {
         front: cardFront,
         back: cardBack,
       })
-      toastManager.add({ type: "success", title: "Card updated" })
+      toastManager.add({ type: "success", title: i18n.t("notebase.templates.cardUpdated") })
       setCardDialog(null)
       reload()
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Failed to update card",
+        title: i18n.t("notebase.common.updateCardFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     } finally {
@@ -185,13 +189,13 @@ export function TemplatesSection() {
     try {
       const repository = await getLocalNotebaseRepository()
       await repository.deleteCard(cardId)
-      toastManager.add({ type: "success", title: "Card deleted" })
+      toastManager.add({ type: "success", title: i18n.t("notebase.templates.cardDeleted") })
       setCardDialog(null)
       reload()
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Failed to delete card",
+        title: i18n.t("notebase.templates.deleteCardFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     } finally {
@@ -204,25 +208,23 @@ export function TemplatesSection() {
       <div className="flex flex-wrap items-center gap-3">
         <Button type="button" variant="ghost" size="sm" render={<Link to={`/notebases/${id}`} />}>
           <IconArrowLeft className="size-4" />
-          Back
+          {i18n.t("notebase.common.back")}
         </Button>
-        <h1 className="text-xl font-semibold">Card templates</h1>
+        <h1 className="text-xl font-semibold">{i18n.t("notebase.templates.title")}</h1>
         <div className="ml-auto flex items-center gap-2">
           <Button type="button" variant="outline" size="sm" onClick={() => void generateCards()}>
             <IconSparkles className="size-4" />
-            Generate all
+            {i18n.t("notebase.templates.generateAll")}
           </Button>
           <Button type="button" variant="brand" size="sm" onClick={openCreate}>
             <IconPlus className="size-4" />
-            Template
+            {i18n.t("notebase.templates.addTemplate")}
           </Button>
         </div>
       </div>
 
       {templates.length === 0 ? (
-        <p className="text-sm text-muted-foreground">
-          No templates yet. Create one to turn rows into flashcards.
-        </p>
+        <p className="text-sm text-muted-foreground">{i18n.t("notebase.templates.noTemplates")}</p>
       ) : (
         <div className="space-y-3">
           {templates.map((template) => {
@@ -235,7 +237,9 @@ export function TemplatesSection() {
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{template.name}</span>
                     <Badge variant="secondary">
-                      {cardCountByTemplate.get(template.id) ?? 0} cards
+                      {i18n.t("notebase.templates.cardCount", [
+                        cardCountByTemplate.get(template.id) ?? 0,
+                      ])}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-2">
@@ -245,7 +249,7 @@ export function TemplatesSection() {
                       size="sm"
                       onClick={() => void generateCards(template.id)}
                     >
-                      Generate
+                      {i18n.t("notebase.templates.generate")}
                     </Button>
                     <Button
                       type="button"
@@ -253,13 +257,13 @@ export function TemplatesSection() {
                       size="sm"
                       onClick={() => openEdit(template.id)}
                     >
-                      Edit
+                      {i18n.t("notebase.common.edit")}
                     </Button>
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon-sm"
-                      aria-label="Delete template"
+                      aria-label={i18n.t("notebase.templates.deleteTemplate")}
                       onClick={() => void deleteTemplate(template.id)}
                     >
                       <IconTrash className="size-4" />
@@ -268,14 +272,18 @@ export function TemplatesSection() {
                 </div>
                 <div className="mt-3 grid gap-3 text-sm md:grid-cols-2">
                   <div className="rounded-md border bg-muted/30 p-3">
-                    <p className="mb-1 text-xs text-muted-foreground">Front</p>
+                    <p className="mb-1 text-xs text-muted-foreground">
+                      {i18n.t("notebase.common.front")}
+                    </p>
                     <p className="break-words whitespace-pre-wrap">
                       {renderPattern(template.config.frontPattern, previewRow, columns) ||
                         template.config.frontPattern}
                     </p>
                   </div>
                   <div className="rounded-md border bg-muted/30 p-3">
-                    <p className="mb-1 text-xs text-muted-foreground">Back</p>
+                    <p className="mb-1 text-xs text-muted-foreground">
+                      {i18n.t("notebase.common.cardBack")}
+                    </p>
                     <p className="break-words whitespace-pre-wrap">
                       {renderPattern(template.config.backPattern, previewRow, columns) ||
                         template.config.backPattern}
@@ -290,13 +298,13 @@ export function TemplatesSection() {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="font-semibold">Cards ({cards.length})</h2>
+          <h2 className="font-semibold">
+            {i18n.t("notebase.templates.cardsTitle", [cards.length])}
+          </h2>
         </div>
 
         {cards.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No cards yet. Generate cards from a template above.
-          </p>
+          <p className="text-sm text-muted-foreground">{i18n.t("notebase.templates.noCards")}</p>
         ) : (
           <div className="space-y-2">
             {cards.map((card) => (
@@ -313,7 +321,7 @@ export function TemplatesSection() {
                       {cardStateLabel(card)}
                     </Badge>
                     <span className="text-xs text-muted-foreground">
-                      Due {new Date(card.dueAt).toLocaleString()}
+                      {i18n.t("notebase.templates.dueAt")} {new Date(card.dueAt).toLocaleString()}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -324,13 +332,13 @@ export function TemplatesSection() {
                       onClick={() => openEditCard(card)}
                     >
                       <IconEdit className="size-4" />
-                      Edit
+                      {i18n.t("notebase.common.edit")}
                     </Button>
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon-sm"
-                      aria-label="Delete card"
+                      aria-label={i18n.t("notebase.common.delete")}
                       onClick={() => setCardDialog({ mode: "delete", cardId: card.id })}
                     >
                       <IconTrash className="size-4" />
@@ -339,11 +347,15 @@ export function TemplatesSection() {
                 </div>
                 <div className="mt-2 grid gap-2 text-sm md:grid-cols-2">
                   <div className="rounded-md border bg-muted/30 p-2">
-                    <p className="mb-1 text-xs text-muted-foreground">Front</p>
+                    <p className="mb-1 text-xs text-muted-foreground">
+                      {i18n.t("notebase.common.front")}
+                    </p>
                     <p className="line-clamp-3 break-words whitespace-pre-wrap">{card.front}</p>
                   </div>
                   <div className="rounded-md border bg-muted/30 p-2">
-                    <p className="mb-1 text-xs text-muted-foreground">Back</p>
+                    <p className="mb-1 text-xs text-muted-foreground">
+                      {i18n.t("notebase.common.cardBack")}
+                    </p>
                     <p className="line-clamp-3 break-words whitespace-pre-wrap">{card.back}</p>
                   </div>
                 </div>
@@ -363,31 +375,35 @@ export function TemplatesSection() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{dialog?.mode === "edit" ? "Edit template" : "New template"}</DialogTitle>
+            <DialogTitle>
+              {dialog?.mode === "edit"
+                ? i18n.t("notebase.templates.editTemplateTitle")
+                : i18n.t("notebase.templates.newTemplateTitle")}
+            </DialogTitle>
             <DialogDescription>
-              Use {"{{ColumnName}}"} placeholders. They are replaced with each row's cell value.
+              {i18n.t("notebase.templates.templateDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <Input
-              placeholder="Template name"
+              placeholder={i18n.t("notebase.templates.templateNamePlaceholder")}
               value={name}
               onChange={(event) => setName(event.target.value)}
             />
             <div className="space-y-1">
-              <p className="text-sm font-medium">Front pattern</p>
+              <p className="text-sm font-medium">{i18n.t("notebase.templates.frontPattern")}</p>
               <Textarea
                 value={frontPattern}
                 onChange={(event) => setFrontPattern(event.target.value)}
-                placeholder={"{{Term}}"}
+                placeholder="{{Term}}"
               />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-medium">Back pattern</p>
+              <p className="text-sm font-medium">{i18n.t("notebase.templates.backPattern")}</p>
               <Textarea
                 value={backPattern}
                 onChange={(event) => setBackPattern(event.target.value)}
-                placeholder={"**Definition:** {{Definition}}"}
+                placeholder="**Definition:** {{Definition}}"
               />
             </div>
           </div>
@@ -398,7 +414,7 @@ export function TemplatesSection() {
               disabled={isBusy || !name.trim()}
               onClick={() => void saveTemplate()}
             >
-              Save
+              {i18n.t("notebase.common.save")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -414,19 +430,18 @@ export function TemplatesSection() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit card</DialogTitle>
+            <DialogTitle>{i18n.t("notebase.templates.editCardTitle")}</DialogTitle>
             <DialogDescription>
-              Change the rendered front and back directly. Regenerating from the template overwrites
-              these edits.
+              {i18n.t("notebase.templates.editCardDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1">
-              <p className="text-sm font-medium">Front</p>
+              <p className="text-sm font-medium">{i18n.t("notebase.common.front")}</p>
               <Textarea value={cardFront} onChange={(event) => setCardFront(event.target.value)} />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-medium">Back</p>
+              <p className="text-sm font-medium">{i18n.t("notebase.common.cardBack")}</p>
               <Textarea value={cardBack} onChange={(event) => setCardBack(event.target.value)} />
             </div>
           </div>
@@ -437,7 +452,7 @@ export function TemplatesSection() {
               disabled={isBusy}
               onClick={() => void saveCardEdit()}
             >
-              Save
+              {i18n.t("notebase.common.save")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -453,10 +468,9 @@ export function TemplatesSection() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete card?</DialogTitle>
+            <DialogTitle>{i18n.t("notebase.templates.deleteCardTitle")}</DialogTitle>
             <DialogDescription>
-              This removes the card and its review history. It can be regenerated from its row
-              later.
+              {i18n.t("notebase.templates.deleteCardDescription")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -466,7 +480,7 @@ export function TemplatesSection() {
               disabled={isBusy}
               onClick={() => void confirmDeleteCard()}
             >
-              Delete
+              {i18n.t("notebase.common.delete")}
             </Button>
             <Button
               type="button"
@@ -474,7 +488,7 @@ export function TemplatesSection() {
               disabled={isBusy}
               onClick={() => setCardDialog(null)}
             >
-              Cancel
+              {i18n.t("notebase.common.cancel")}
             </Button>
           </DialogFooter>
         </DialogContent>

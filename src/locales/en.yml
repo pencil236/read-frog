@@ -1500,3 +1500,190 @@ languages:
   wls: Wallisian
   rar: Rarotongan
   hif: Fiji Hindi
+notebase:
+  title: Read Frog Notebase
+  nav:
+    notebases: Notebases
+    storage: Storage
+  common:
+    back: Back
+    save: Save
+    cancel: Cancel
+    edit: Edit
+    delete: Delete
+    front: Front
+    cardBack: Back
+    operationFailed: Operation failed
+    updateCardFailed: Failed to update card
+  list:
+    title: Notebases
+    description: Vocabulary saved from dictionary lookups lives here, locally.
+    emptyTitle: No notebases yet
+    emptyDescription: Run a dictionary Custom AI Action on any page, then press Save to Notebase — the first save creates a local notebase here.
+    localBadge: local
+    updated: Updated
+    open: Open
+  columnType:
+    string: Text
+    number: Number
+    boolean: Boolean
+    date: Date
+    select: Select
+  filter:
+    contains: contains
+    equals: equals
+    notEquals: not equals
+    isEmpty: is empty
+    isNotEmpty: is not empty
+  cardState:
+    new: new
+    learning: learning
+    review: review
+    relearning: relearning
+    buried: buried
+    suspended: suspended
+  detail:
+    titleFallback: Notebase
+    primaryBadge: primary
+    actions: Actions
+    emptyGroup: Empty
+    templates: Templates
+    review: Review
+    srs: SRS
+    addColumn: Column
+    addRow: Row
+    noViews: No views
+    newView: New view
+    viewTable: Table
+    viewKanban: Kanban
+    viewGallery: Gallery
+    viewSettings: Settings
+    rowCount: "$1 / $2 rows"
+    noColumns: This notebase has no columns yet. Add one to start entering notes.
+    viewSettingsTitle: View settings
+    viewSettingsDescription: Filters and sorts apply to every display mode of this view.
+    name: Name
+    rename: Rename
+    filters: Filters
+    addFilter: Add filter
+    noFilters: No filters.
+    sorts: Sorts
+    addSort: Add sort
+    noSorts: No sorts.
+    sortAscending: Ascending
+    sortDescending: Descending
+    removeFilter: Remove filter
+    removeSort: Remove sort
+    deleteView: Delete view
+    done: Done
+    editColumnTitle: Edit column
+    addColumnTitle: Add column
+    columnNamePlaceholder: Column name
+    defaultViewName: View
+    editColumn: Edit column
+    moveColumnLeft: Move column left
+    moveColumnRight: Move column right
+    deleteColumn: Delete column
+    moveRowUp: Move row up
+    moveRowDown: Move row down
+    deleteRow: Delete row
+  storage:
+    title: Storage
+    description: Choose where your local notebases live. All data stays on this device.
+    location: Storage location
+    locationDescription: Pick a folder on this computer. Read Frog reads and writes your notebases as JSON files inside read-frog/.
+    currentFolder: Current folder
+    removeFolder: Remove folder
+    noFolderTitle: No folder chosen yet
+    noFolderDescription: Notebases are currently stored in the extension's built-in storage. Choose a folder to take full control of your data.
+    noFolderDescriptionFirefox: This browser does not support direct folder access. Data is stored in the extension's built-in storage; use export/import below to move it.
+    changeFolder: Change folder
+    chooseFolder: Choose folder
+    backup: Backup
+    backupDescription: Export all notebases to a single JSON file, or import a previously exported file.
+    exportJson: Export JSON
+    importJson: Import JSON
+    directorySelected: Directory selected
+    selectDirectoryFailed: Failed to select directory
+    exportFailed: Export failed
+    imported: Imported $1 notebases
+    importFailed: Import failed
+    invalidExportFile: Invalid export file
+  templates:
+    title: Card templates
+    generateAll: Generate all
+    addTemplate: Template
+    noTemplates: No templates yet. Create one to turn rows into flashcards.
+    cardCount: "$1 cards"
+    generate: Generate
+    deleteTemplate: Delete template
+    cardsTitle: "Cards ($1)"
+    noCards: No cards yet. Generate cards from a template above.
+    dueAt: Due
+    editTemplateTitle: Edit template
+    newTemplateTitle: New template
+    templateDescription: Use {{ColumnName}} placeholders. They are replaced with each row's cell value.
+    templateNamePlaceholder: Template name
+    frontPattern: Front pattern
+    backPattern: Back pattern
+    editCardTitle: Edit card
+    editCardDescription: Change the rendered front and back directly. Regenerating from the template overwrites these edits.
+    deleteCardTitle: Delete card?
+    deleteCardDescription: This removes the card and its review history. It can be regenerated from its row later.
+    saveTemplateFailed: Failed to save template
+    deleteTemplateFailed: Failed to delete template
+    noNewCards: No new cards to generate
+    generatedCards: Generated $1 cards
+    generateCardsFailed: Failed to generate cards
+    cardUpdated: Card updated
+    cardDeleted: Card deleted
+    deleteCardFailed: Failed to delete card
+  review:
+    title: Review
+    ratingAgain: Again
+    ratingHard: Hard
+    ratingGood: Good
+    ratingEasy: Easy
+    newBadge: "$1 new"
+    learningBadge: "$1 learning"
+    reviewBadge: "$1 review"
+    history: History
+    start: Start
+    recentReviews: Recent reviews
+    noReviews: No reviews yet.
+    nothingDue: Nothing due right now. Generate cards and save new notes to build your review queue.
+    dueTodayOne: "$1 card due today."
+    dueTodayMany: "$1 cards due today."
+    cardProgress: "Card $1 of $2"
+    suspend: Suspend
+    bury: Bury
+    showAnswer: Show answer
+    pressSpaceHint: Press Space to reveal
+    sessionComplete: Session complete
+    sessionSummary: You reviewed $1 cards. Come back when the next ones are due.
+    undoLast: Undo last review
+    reviewAgain: Review again
+    reviewCardFailed: Failed to review card
+    lastReviewUndone: Last review undone
+    undoFailed: Failed to undo review
+  srs:
+    title: SRS settings
+    description: Tune how new cards and reviews are scheduled for this notebase.
+    newPerDay: New cards per day
+    reviewsPerDay: Reviews per day
+    unlimited: "-1 means unlimited"
+    desiredRetention: Desired retention
+    retentionHint: 0.3 to 1.0; higher means more reviews
+    maxInterval: Maximum interval (days)
+    leechThreshold: Leech threshold
+    learningSteps: Learning steps
+    relearningSteps: Relearning steps
+    shortTerm: Short-term scheduling
+    shortTermHint: Apply (re)learning steps before long-term intervals
+    fuzz: Interval fuzz
+    fuzzHint: Add small randomness to long intervals
+    saving: Saving...
+    invalidSteps: Invalid learning steps
+    invalidStepsDescription: 'Steps use durations like "1m", "10m", "1h" or "1d", separated by commas.'
+    saved: SRS settings saved
+    saveFailed: Failed to save SRS settings

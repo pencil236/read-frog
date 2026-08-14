@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/base-ui/input"
 import { Label } from "@/components/ui/base-ui/label"
 import { Switch } from "@/components/ui/base-ui/switch"
 import { toastManager } from "@/components/ui/base-ui/toast"
+import { i18n } from "@/utils/i18n"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
 
 const STEP_PATTERN = /^[1-9]\d*[mhd]$/
@@ -77,8 +78,8 @@ export function SrsSettingsDialog({
     if (!stepsValid(learningSteps) || !stepsValid(relearningSteps)) {
       toastManager.add({
         type: "error",
-        title: "Invalid learning steps",
-        description: 'Steps use durations like "1m", "10m", "1h" or "1d", separated by commas.',
+        title: i18n.t("notebase.srs.invalidSteps"),
+        description: i18n.t("notebase.srs.invalidStepsDescription"),
       })
       return
     }
@@ -99,13 +100,13 @@ export function SrsSettingsDialog({
           enableFuzz,
         },
       })
-      toastManager.add({ type: "success", title: "SRS settings saved" })
+      toastManager.add({ type: "success", title: i18n.t("notebase.srs.saved") })
       onOpenChange(false)
       onSaved()
     } catch (error) {
       toastManager.add({
         type: "error",
-        title: "Failed to save SRS settings",
+        title: i18n.t("notebase.srs.saveFailed"),
         description: error instanceof Error ? error.message : undefined,
       })
     } finally {
@@ -124,38 +125,36 @@ export function SrsSettingsDialog({
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>SRS settings</DialogTitle>
-          <DialogDescription>
-            Tune how new cards and reviews are scheduled for this notebase.
-          </DialogDescription>
+          <DialogTitle>{i18n.t("notebase.srs.title")}</DialogTitle>
+          <DialogDescription>{i18n.t("notebase.srs.description")}</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <Label htmlFor="srs-new-per-day">New cards per day</Label>
+              <Label htmlFor="srs-new-per-day">{i18n.t("notebase.srs.newPerDay")}</Label>
               <Input
                 id="srs-new-per-day"
                 type="number"
                 value={newPerDay}
                 onChange={(event) => setNewPerDay(Number(event.target.value))}
               />
-              <p className="text-xs text-muted-foreground">-1 means unlimited</p>
+              <p className="text-xs text-muted-foreground">{i18n.t("notebase.srs.unlimited")}</p>
             </div>
             <div className="space-y-1">
-              <Label htmlFor="srs-reviews-per-day">Reviews per day</Label>
+              <Label htmlFor="srs-reviews-per-day">{i18n.t("notebase.srs.reviewsPerDay")}</Label>
               <Input
                 id="srs-reviews-per-day"
                 type="number"
                 value={reviewsPerDay}
                 onChange={(event) => setReviewsPerDay(Number(event.target.value))}
               />
-              <p className="text-xs text-muted-foreground">-1 means unlimited</p>
+              <p className="text-xs text-muted-foreground">{i18n.t("notebase.srs.unlimited")}</p>
             </div>
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="srs-retention">Desired retention</Label>
+            <Label htmlFor="srs-retention">{i18n.t("notebase.srs.desiredRetention")}</Label>
             <Input
               id="srs-retention"
               type="number"
@@ -165,12 +164,12 @@ export function SrsSettingsDialog({
               value={desiredRetention}
               onChange={(event) => setDesiredRetention(Number(event.target.value))}
             />
-            <p className="text-xs text-muted-foreground">0.3 to 1.0; higher means more reviews</p>
+            <p className="text-xs text-muted-foreground">{i18n.t("notebase.srs.retentionHint")}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <Label htmlFor="srs-max-interval">Maximum interval (days)</Label>
+              <Label htmlFor="srs-max-interval">{i18n.t("notebase.srs.maxInterval")}</Label>
               <Input
                 id="srs-max-interval"
                 type="number"
@@ -180,7 +179,7 @@ export function SrsSettingsDialog({
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="srs-leech">Leech threshold</Label>
+              <Label htmlFor="srs-leech">{i18n.t("notebase.srs.leechThreshold")}</Label>
               <Input
                 id="srs-leech"
                 type="number"
@@ -192,7 +191,7 @@ export function SrsSettingsDialog({
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="srs-learning-steps">Learning steps</Label>
+            <Label htmlFor="srs-learning-steps">{i18n.t("notebase.srs.learningSteps")}</Label>
             <Input
               id="srs-learning-steps"
               value={learningSteps}
@@ -201,7 +200,7 @@ export function SrsSettingsDialog({
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="srs-relearning-steps">Relearning steps</Label>
+            <Label htmlFor="srs-relearning-steps">{i18n.t("notebase.srs.relearningSteps")}</Label>
             <Input
               id="srs-relearning-steps"
               value={relearningSteps}
@@ -211,9 +210,9 @@ export function SrsSettingsDialog({
 
           <div className="flex items-center justify-between gap-3">
             <div>
-              <Label htmlFor="srs-short-term">Short-term scheduling</Label>
+              <Label htmlFor="srs-short-term">{i18n.t("notebase.srs.shortTerm")}</Label>
               <p className="text-xs text-muted-foreground">
-                Apply (re)learning steps before long-term intervals
+                {i18n.t("notebase.srs.shortTermHint")}
               </p>
             </div>
             <Switch
@@ -225,10 +224,8 @@ export function SrsSettingsDialog({
 
           <div className="flex items-center justify-between gap-3">
             <div>
-              <Label htmlFor="srs-fuzz">Interval fuzz</Label>
-              <p className="text-xs text-muted-foreground">
-                Add small randomness to long intervals
-              </p>
+              <Label htmlFor="srs-fuzz">{i18n.t("notebase.srs.fuzz")}</Label>
+              <p className="text-xs text-muted-foreground">{i18n.t("notebase.srs.fuzzHint")}</p>
             </div>
             <Switch id="srs-fuzz" checked={enableFuzz} onCheckedChange={setEnableFuzz} />
           </div>
@@ -236,7 +233,7 @@ export function SrsSettingsDialog({
 
         <DialogFooter>
           <Button type="button" variant="brand" disabled={isSaving} onClick={() => void save()}>
-            {isSaving ? "Saving..." : "Save"}
+            {isSaving ? i18n.t("notebase.srs.saving") : i18n.t("notebase.common.save")}
           </Button>
         </DialogFooter>
       </DialogContent>
