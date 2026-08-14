@@ -29,7 +29,6 @@ import { setupIframeInjection } from "./iframe-injection"
 import { setupLLMGenerateTextMessageHandlers } from "./llm-generate-text"
 import { initMockData } from "./mock-data"
 import { newUserGuide } from "./new-user-guide"
-import { setupNotebasePendingSaveProcessor } from "./notebase-pending-save"
 import { proxyFetch } from "./proxy-fetch"
 import { setupSidePanelMessageHandler } from "./side-panel"
 import { setUpSubtitlesTranslationQueue, setUpWebPageTranslationQueue } from "./translation-queues"
@@ -140,7 +139,6 @@ export default defineBackground({
 
     proxyFetch()
     setupHostedAiStatusHandler()
-    setupNotebasePendingSaveProcessor(() => backgroundReady)
     setupEdgeTTSMessageHandlers()
     setupLLMGenerateTextMessageHandlers()
     setupTTSPlaybackMessageHandlers()

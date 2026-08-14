@@ -634,7 +634,11 @@ options:
           cancel: İptal
         notebase:
           title: Notebase bağlantısı
-          description: Bu eylemin yapılandırılmış sonuçlarını uzak bir Notebase'e kaydedin.
+          notConnectedTitle: Henüz yerel not tabanı yok
+          notConnectedDescription: İlk kayıtta bu eylemin alanlarıyla eşleşen yerel bir not tabanı otomatik oluşturulur.
+          connectedTitle: Bağlı yerel not tabanı
+          connectedLoading: Yerel not tabanı yükleniyor…
+          description: Bu eylemin yapılandırılmış sonuçlarını yerel bir not tabanına kaydedin.
           loginRequiredTitle: Notebase yapılandırmak için giriş yapın
           loginRequiredDescription: notebase seçmeden veya eşlemeleri düzenlemeden önce readfrog.app'te oturum açın.
           loginRequiredConnectedDescription: Bu bağlantı aşağıdaki hesapla oluşturuldu. Aynı hesapla giriş yaparsanız alan eşlemeleri geri yüklenir. Başka bir hesapla giriş yaparsanız Notebase oluştururken veya bağlarken önceki eşlemeler temizlenir.
@@ -1068,6 +1072,7 @@ speak:
   openaiApiKeyNotConfigured: OpenAI API anahtarı yapılandırılmadı
 action:
   copy: Kopyala
+  cancel: İptal
   copied: Kopyalandı
   regenerate: Yeniden oluştur
   viewContextDetails: Bağlam

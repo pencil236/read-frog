@@ -634,7 +634,11 @@ options:
           cancel: Отмена
         notebase:
           title: Подключение Notebase
-          description: Сохранить структурированные результаты этого действия в удалённую Notebase.
+          notConnectedTitle: Локальной базы заметок пока нет
+          notConnectedDescription: При первом сохранении автоматически создаётся локальная база заметок с полями этого действия.
+          connectedTitle: Подключённая локальная база заметок
+          connectedLoading: Загрузка локальной базы заметок…
+          description: Сохраняйте структурированные результаты этого действия в локальную базу заметок.
           loginRequiredTitle: Войдите, чтобы настроить Notebase
           loginRequiredDescription: Войдите на readfrog.app, прежде чем выбирать notebase или редактировать сопоставления.
           loginRequiredConnectedDescription: Это подключение создано аккаунтом ниже. Если войти в тот же аккаунт, сопоставления полей будут восстановлены. Если войти в другой аккаунт, прежние сопоставления будут очищены при создании или подключении Notebase.
@@ -1068,6 +1072,7 @@ speak:
   openaiApiKeyNotConfigured: API-ключ OpenAI не настроен
 action:
   copy: Копировать
+  cancel: Отмена
   copied: Скопировано
   regenerate: Сгенерировать заново
   viewContextDetails: Контекст

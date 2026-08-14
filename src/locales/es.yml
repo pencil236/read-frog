@@ -635,7 +635,11 @@ options:
           cancel: Cancelar
         notebase:
           title: Conexión de Notebase
-          description: Guarda los resultados estructurados de esta acción en una Notebase remota.
+          notConnectedTitle: Aún no hay una base de notas local
+          notConnectedDescription: La primera vez que guardes se creará automáticamente una base de notas local con los campos de esta acción.
+          connectedTitle: Base de notas local conectada
+          connectedLoading: Cargando base de notas local…
+          description: Guarda los resultados estructurados de esta acción en una base de notas local.
           loginRequiredTitle: Inicia sesión para configurar Notebase
           loginRequiredDescription: Inicia sesión en readfrog.app antes de elegir una Notebase o editar asignaciones.
           loginRequiredConnectedDescription: Esta conexión fue creada por la cuenta de abajo. Si inicias sesión con la misma cuenta, se restaurarán las asignaciones de campos. Si inicias sesión con otra cuenta, las asignaciones anteriores se borrarán al crear o conectar una Notebase.
@@ -1184,6 +1188,7 @@ speak:
   openaiApiKeyNotConfigured: La clave API de OpenAI no está configurada
 action:
   copy: Copiar
+  cancel: Cancelar
   copied: Copiado
   regenerate: Regenerar
   viewContextDetails: Contexto

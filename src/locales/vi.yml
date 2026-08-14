@@ -634,7 +634,11 @@ options:
           cancel: Hủy
         notebase:
           title: Kết nối Notebase
-          description: Lưu kết quả có cấu trúc của hành động này vào Notebase từ xa.
+          notConnectedTitle: Chưa có cơ sở ghi chú cục bộ
+          notConnectedDescription: Lần lưu đầu tiên sẽ tự động tạo cơ sở ghi chú cục bộ khớp với các trường của hành động này.
+          connectedTitle: Cơ sở ghi chú cục bộ đã kết nối
+          connectedLoading: Đang tải cơ sở ghi chú cục bộ…
+          description: Lưu kết quả có cấu trúc của hành động này vào cơ sở ghi chú cục bộ.
           loginRequiredTitle: Đăng nhập để cấu hình Notebase
           loginRequiredDescription: Hãy đăng nhập trên readfrog.app trước khi chọn notebase hoặc chỉnh sửa ánh xạ.
           loginRequiredConnectedDescription: Kết nối này được tạo bởi tài khoản bên dưới. Nếu đăng nhập bằng cùng tài khoản, ánh xạ trường sẽ được khôi phục. Nếu đăng nhập bằng tài khoản khác, các ánh xạ cũ sẽ bị xóa khi bạn tạo hoặc kết nối Notebase.
@@ -1068,6 +1072,7 @@ speak:
   openaiApiKeyNotConfigured: API key OpenAI chưa được cấu hình
 action:
   copy: Sao chép
+  cancel: Hủy
   copied: Đã sao chép
   regenerate: Tạo lại
   viewContextDetails: Ngữ cảnh

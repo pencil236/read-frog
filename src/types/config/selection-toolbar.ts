@@ -39,6 +39,7 @@ export const selectionToolbarBuiltInActionStateSchema = z.object({
   enabled: z.boolean(),
   providerId: z.string().nonempty(),
   notebaseConnection: selectionToolbarCustomActionNotebaseConnectionSchema.optional(),
+  localNotebaseId: z.string().nonempty().optional(),
 })
 
 export const selectionToolbarBuiltInActionsSchema = z.object({
@@ -56,6 +57,7 @@ export const selectionToolbarCustomActionSchema = z
     prompt: z.string(),
     outputSchema: z.array(selectionToolbarCustomActionOutputFieldSchema).min(1),
     notebaseConnection: selectionToolbarCustomActionNotebaseConnectionSchema.optional(),
+    localNotebaseId: z.string().nonempty().optional(),
   })
   .superRefine((action, ctx) => {
     const nameSet = new Set<string>()

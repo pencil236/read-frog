@@ -635,7 +635,11 @@ options:
           cancel: 取消
         notebase:
           title: 笔记库连接
-          description: 将这个指令的结构化结果保存到远程笔记库。
+          description: 将这个指令的结构化结果保存到本设备的本地笔记库。
+          notConnectedTitle: 还没有本地笔记库
+          notConnectedDescription: 首次保存时会自动创建一个与这个指令字段匹配的本地笔记库。
+          connectedTitle: 已连接的本地笔记库
+          connectedLoading: 正在加载本地笔记库…
           loginRequiredTitle: 登录后才能配置笔记库
           loginRequiredDescription: 先在 readfrog.app 登录，然后再选择笔记库和编辑映射。
           loginRequiredConnectedDescription: 这个连接来自下面的账号。如果登录原账号，会恢复字段映射；如果登录其他账号，创建或连接笔记库时会清空之前的字段映射。
@@ -1184,6 +1188,7 @@ speak:
   openaiApiKeyNotConfigured: OpenAI API Key 未配置
 action:
   copy: 复制
+  cancel: 取消
   copied: 已复制
   regenerate: 重新生成
   viewContextDetails: 上下文

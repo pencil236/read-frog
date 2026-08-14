@@ -1,44 +1,25 @@
 import type { FeatureProviderAnalytics } from "@/types/analytics"
-import type {
-  SelectionToolbarCustomAction,
-  SelectionToolbarCustomActionNotebaseAccount,
-} from "@/types/config/selection-toolbar"
-import type {
-  PendingConnectedNotebaseSave,
-  PendingCreateNotebaseSave,
-} from "@/utils/notebase/pending-save"
+import type { SelectionToolbarCustomAction } from "@/types/config/selection-toolbar"
 import { atom } from "jotai"
 
 export type SaveToNotebaseAnalyticsSource = "note_suggestion"
+
+export interface PendingLocalNotebaseSave {
+  action: SelectionToolbarCustomAction
+  results: Array<Record<string, unknown>>
+  /**
+   * Present when the action does not exist in config yet (save suggestion
+   * flow). It is appended to config when the dialog is confirmed.
+   */
+  actionDraft?: SelectionToolbarCustomAction
+}
 
 export type SaveToNotebaseDialogState =
   | { open: false }
   | {
       open: true
-      mode: "create_or_connect"
-      pendingNotebaseSave: PendingCreateNotebaseSave
-      /**
-       * Present when the action does not exist in config yet (save suggestion
-       * flow). It is appended to config at dialog confirm — the "real action
-       * button" moment. Invariant: pendingActionDraft.id === pendingNotebaseSave.actionId.
-       */
-      pendingActionDraft?: SelectionToolbarCustomAction
-      analyticsSource?: SaveToNotebaseAnalyticsSource
-      analyticsProvider?: FeatureProviderAnalytics
-    }
-  | {
-      open: true
-      mode: "connected_login_required"
-      pendingNotebaseSave: PendingConnectedNotebaseSave
-      connectedAccount: SelectionToolbarCustomActionNotebaseAccount
-      analyticsSource?: SaveToNotebaseAnalyticsSource
-      analyticsProvider?: FeatureProviderAnalytics
-    }
-  | {
-      open: true
-      mode: "foreign_connection"
-      pendingNotebaseSave: PendingCreateNotebaseSave
-      connectedAccount: SelectionToolbarCustomActionNotebaseAccount
+      mode: "create_local"
+      pendingSave: PendingLocalNotebaseSave
       analyticsSource?: SaveToNotebaseAnalyticsSource
       analyticsProvider?: FeatureProviderAnalytics
     }

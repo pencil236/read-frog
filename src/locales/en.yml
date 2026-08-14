@@ -635,7 +635,11 @@ options:
           cancel: Cancel
         notebase:
           title: Notebase connection
-          description: Save this action's structured results to a remote notebase.
+          description: Save this action's structured results to a local notebase on this device.
+          notConnectedTitle: No local notebase yet
+          notConnectedDescription: The first save automatically creates a local notebase that matches this action's fields.
+          connectedTitle: Connected local notebase
+          connectedLoading: Loading local notebase...
           loginRequiredTitle: Log in to configure Notebase
           loginRequiredDescription: Sign in on readfrog.app before choosing a notebase or editing mappings.
           loginRequiredConnectedDescription: This connection was created by the account below. If you log in as the same account, field mappings will be restored. If you log in as another account, the previous mappings will be cleared when you create or connect a Notebase.
@@ -1184,6 +1188,7 @@ speak:
   openaiApiKeyNotConfigured: OpenAI API key is not configured
 action:
   copy: Copy
+  cancel: Cancel
   copied: Copied
   regenerate: Regenerate
   viewContextDetails: Context

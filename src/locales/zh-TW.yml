@@ -635,7 +635,11 @@ options:
           cancel: 取消
         notebase:
           title: 筆記庫連線
-          description: 將這個指令的結構化結果儲存到遠端筆記庫。
+          notConnectedTitle: 尚未建立本地筆記庫
+          notConnectedDescription: 首次儲存時會自動建立與此指令欄位相符的本地筆記庫。
+          connectedTitle: 已連接的本地筆記庫
+          connectedLoading: 正在載入本地筆記庫…
+          description: 將此指令的結構化結果儲存到本機的本地筆記庫。
           loginRequiredTitle: 登入後才能設定筆記庫
           loginRequiredDescription: 先到 readfrog.app 登入，再選擇筆記庫與編輯對應。
           loginRequiredConnectedDescription: 這個連線來自下方帳號。如果登入原帳號，會恢復欄位對應；如果登入其他帳號，建立或連線筆記庫時會清除先前的欄位對應。
@@ -1184,6 +1188,7 @@ speak:
   openaiApiKeyNotConfigured: 尚未設定 OpenAI API 金鑰
 action:
   copy: 複製
+  cancel: 取消
   copied: 已複製
   regenerate: 重新產生
   viewContextDetails: 前後文

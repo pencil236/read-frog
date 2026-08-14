@@ -634,7 +634,11 @@ options:
           cancel: キャンセル
         notebase:
           title: Notebase 接続
-          description: このアクションの構造化された結果をリモート Notebase に保存します。
+          notConnectedTitle: ローカルノートベースがまだありません
+          notConnectedDescription: 初回保存時にこのアクションのフィールドに一致するローカルノートベースが自動的に作成されます。
+          connectedTitle: 接続済みのローカルノートベース
+          connectedLoading: ローカルノートベースを読み込み中…
+          description: このアクションの構造化された結果をローカルノートベースに保存します。
           loginRequiredTitle: Notebase を設定するにはログインが必要です
           loginRequiredDescription: notebase を選択したりマッピングを編集したりする前に、readfrog.app にログインしてください。
           loginRequiredConnectedDescription: この接続は下のアカウントで作成されました。同じアカウントでログインするとフィールドマッピングが復元されます。別のアカウントでログインした場合、Notebase を作成または接続すると以前のマッピングは消去されます。
@@ -1068,6 +1072,7 @@ speak:
   openaiApiKeyNotConfigured: OpenAI APIキーが設定されていません
 action:
   copy: コピー
+  cancel: キャンセル
   copied: コピー済み
   regenerate: 再生成
   viewContextDetails: コンテキスト
