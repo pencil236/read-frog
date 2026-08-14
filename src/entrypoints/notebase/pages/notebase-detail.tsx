@@ -39,6 +39,7 @@ import { toastManager } from "@/components/ui/base-ui/toast"
 import { createColumnConfig } from "@/utils/local-notebase/render"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
 import { formatCellValue, useNotebaseSnapshot } from "../lib"
+import { SrsSettingsDialog } from "../srs-settings-dialog"
 
 const COLUMN_TYPES = ["string", "number", "boolean", "date", "select"] as const
 const FILTER_OPERATORS = ["contains", "equals", "not_equals", "is_empty", "is_not_empty"] as const
@@ -211,6 +212,7 @@ export function NotebaseDetailPage() {
   const [activeViewId, setActiveViewId] = useState<string | null>(null)
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [viewName, setViewName] = useState("")
+  const [srsOpen, setSrsOpen] = useState(false)
 
   const columns = useMemo(() => snapshot?.columns ?? [], [snapshot])
   const rows = useMemo(() => snapshot?.rows ?? [], [snapshot])
@@ -588,6 +590,9 @@ export function NotebaseDetailPage() {
             render={<Link to={`/notebases/${id}/review`} />}
           >
             Review
+          </Button>
+          <Button type="button" variant="outline" size="sm" onClick={() => setSrsOpen(true)}>
+            SRS
           </Button>
           <Button type="button" variant="outline" size="sm" onClick={openCreateColumn}>
             <IconPlus className="size-4" />
@@ -992,6 +997,13 @@ export function NotebaseDetailPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <SrsSettingsDialog
+        notebase={snapshot?.notebase}
+        open={srsOpen}
+        onOpenChange={setSrsOpen}
+        onSaved={reload}
+      />
     </div>
   )
 }

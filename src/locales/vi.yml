@@ -97,6 +97,7 @@ options:
     product: Sản phẩm
   tools:
     translationHub: Trung tâm Dịch thuật
+    notebase: Notebase
   product:
     roadmap: Lộ trình
   helpAndCommunity:

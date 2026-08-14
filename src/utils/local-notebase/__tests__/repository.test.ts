@@ -83,6 +83,43 @@ describe("LocalNotebaseRepositoryImpl (internal store)", () => {
     await expect(repository.rollbackReview(card!.id)).rejects.toThrow("No review to roll back")
   })
 
+  it("updates card front/back directly", async () => {
+    const created = await createDictionaryNotebase()
+    const [template] = await repository.listTemplates(created.id)
+    await repository.createRows(created.id, [{ cells: { Term: "hello", Definition: "你好" } }])
+    await repository.generateCards(created.id, template!.id)
+    const [card] = await repository.listCards(created.id)
+
+    const updated = await repository.updateCard(card!.id, {
+      front: "hi",
+      back: "**Definition:** 你好",
+    })
+    expect(updated.front).toBe("hi")
+    expect(updated.back).toContain("Definition")
+
+    const cards = await repository.listCards(created.id)
+    expect(cards[0]!.front).toBe("hi")
+  })
+
+  it("deletes an individual card and its review history", async () => {
+    const created = await createDictionaryNotebase()
+    const [template] = await repository.listTemplates(created.id)
+    await repository.createRows(created.id, [{ cells: { Term: "a" } }, { cells: { Term: "b" } }])
+    await repository.generateCards(created.id, template!.id)
+    const cards = await repository.listCards(created.id)
+    expect(cards).toHaveLength(2)
+
+    await repository.reviewCard(cards[0]!.id, "good", 3_000, TIMEZONE)
+    await repository.deleteCard(cards[0]!.id)
+
+    const remaining = await repository.listCards(created.id)
+    expect(remaining).toHaveLength(1)
+    expect(remaining[0]!.id).toBe(cards[1]!.id)
+
+    const snapshot = await store.loadSnapshot(created.id)
+    expect(snapshot?.revlogs).toHaveLength(0)
+  })
+
   it("supports burying, suspending and due stats", async () => {
     const created = await createDictionaryNotebase()
     const [template] = await repository.listTemplates(created.id)

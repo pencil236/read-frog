@@ -97,6 +97,7 @@ options:
     product: Ürün
   tools:
     translationHub: Çeviri Merkezi
+    notebase: Notebase
   product:
     roadmap: Yol Haritası
   helpAndCommunity:

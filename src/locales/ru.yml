@@ -97,6 +97,7 @@ options:
     product: Продукт
   tools:
     translationHub: Центр переводов
+    notebase: Notebase
   product:
     roadmap: Дорожная карта
   helpAndCommunity:

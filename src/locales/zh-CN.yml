@@ -97,6 +97,7 @@ options:
     product: 产品
   tools:
     translationHub: 翻译中心
+    notebase: 笔记库
   product:
     roadmap: 路线图
   helpAndCommunity:

@@ -1,14 +1,15 @@
 import type { ReviewRating } from "@read-frog/definitions"
-import type { LocalCard } from "@/utils/local-notebase/types"
+import type { LocalCard, LocalRevlog } from "@/utils/local-notebase/types"
 import { getSrsDayEnd } from "@read-frog/definitions"
 import {
   IconArrowLeft,
   IconEyeOff,
+  IconHistory,
   IconPlayerPause,
   IconPlayerPlay,
   IconRotate,
 } from "@tabler/icons-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import { Link, useParams } from "react-router"
 import { Badge } from "@/components/ui/base-ui/badge"
@@ -16,9 +17,17 @@ import { Button } from "@/components/ui/base-ui/button"
 import { toastManager } from "@/components/ui/base-ui/toast"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
 import { useAsyncData, useNotebaseSnapshot } from "./lib"
+import { SrsSettingsDialog } from "./srs-settings-dialog"
 
 function getTimezone(): string {
   return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"
+}
+
+const RATING_SHORTCUTS: Record<ReviewRating, string> = {
+  again: "1",
+  hard: "2",
+  good: "3",
+  easy: "4",
 }
 
 const RATINGS: Array<{ value: ReviewRating; label: string; className: string }> = [
@@ -44,6 +53,39 @@ const RATINGS: Array<{ value: ReviewRating; label: string; className: string }> 
   },
 ]
 
+const RATING_BADGE_CLASS: Record<ReviewRating, string> = {
+  again: "bg-destructive/10 text-destructive",
+  hard: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
+  good: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+  easy: "bg-sky-500/10 text-sky-700 dark:text-sky-400",
+}
+
+const EMPTY_RATING_COUNTS: Record<ReviewRating, number> = {
+  again: 0,
+  hard: 0,
+  good: 0,
+  easy: 0,
+}
+
+function formatDuration(durationMs: number): string {
+  if (durationMs < 1000) {
+    return `${Math.round(durationMs)}ms`
+  }
+  return `${(durationMs / 1000).toFixed(1)}s`
+}
+
+function RatingCounters({ counts }: { counts: Record<ReviewRating, number> }) {
+  return (
+    <div className="flex items-center justify-center gap-2 text-xs">
+      {RATINGS.map((rating) => (
+        <Badge key={rating.value} variant="outline" className={RATING_BADGE_CLASS[rating.value]}>
+          {rating.label}: {counts[rating.value]}
+        </Badge>
+      ))}
+    </div>
+  )
+}
+
 export function ReviewSection() {
   const { id } = useParams<{ id: string }>()
   const { data: snapshot, reload } = useNotebaseSnapshot(id)
@@ -61,6 +103,10 @@ export function ReviewSection() {
   const [startedAt, setStartedAt] = useState<number>(Date.now())
   const [lastReviewedId, setLastReviewedId] = useState<string | null>(null)
   const [completed, setCompleted] = useState(false)
+  const [ratingCounts, setRatingCounts] =
+    useState<Record<ReviewRating, number>>(EMPTY_RATING_COUNTS)
+  const [showHistory, setShowHistory] = useState(false)
+  const [srsOpen, setSrsOpen] = useState(false)
 
   const dueCards = useMemo(() => {
     if (!snapshot) {
@@ -77,12 +123,9 @@ export function ReviewSection() {
       .sort((a, b) => a.dueAt.getTime() - b.dueAt.getTime())
   }, [snapshot])
 
-  if (!id) {
-    return null
-  }
-
   const currentCard = queue?.[index]
-  const dueStats = stats?.[id]
+  const dueStats = id ? stats?.[id] : undefined
+  const progress = queue && queue.length > 0 ? Math.round((index / queue.length) * 100) : 0
 
   const startReview = () => {
     setQueue(dueCards)
@@ -91,6 +134,7 @@ export function ReviewSection() {
     setCompleted(false)
     setLastReviewedId(null)
     setStartedAt(Date.now())
+    setRatingCounts(EMPTY_RATING_COUNTS)
   }
 
   const rateCard = async (rating: ReviewRating) => {
@@ -101,6 +145,7 @@ export function ReviewSection() {
     try {
       const repository = await getLocalNotebaseRepository()
       await repository.reviewCard(currentCard.id, rating, durationMs, getTimezone())
+      setRatingCounts((counts) => ({ ...counts, [rating]: counts[rating] + 1 }))
       setLastReviewedId(currentCard.id)
       if (index + 1 < (queue?.length ?? 0)) {
         setIndex((value) => value + 1)
@@ -119,6 +164,9 @@ export function ReviewSection() {
       })
     }
   }
+
+  const rateCardRef = useRef(rateCard)
+  rateCardRef.current = rateCard
 
   const setCardStatus = async (action: "bury" | "suspend", enabled: boolean) => {
     if (!currentCard) {
@@ -161,6 +209,55 @@ export function ReviewSection() {
     }
   }
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.repeat || event.metaKey || event.ctrlKey || event.altKey) {
+        return
+      }
+      const target = event.target as HTMLElement | null
+      if (
+        target &&
+        (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)
+      ) {
+        return
+      }
+
+      if (!revealed) {
+        if (event.key === " " || event.key === "Enter") {
+          event.preventDefault()
+          setRevealed(true)
+        }
+        return
+      }
+
+      const ratingByKey: Record<string, ReviewRating> = {
+        "1": "again",
+        "2": "hard",
+        "3": "good",
+        "4": "easy",
+      }
+      const rating = ratingByKey[event.key]
+      if (rating) {
+        event.preventDefault()
+        void rateCardRef.current(rating)
+      }
+    }
+
+    if (queue && !completed) {
+      window.addEventListener("keydown", onKeyDown)
+    }
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [queue, completed, revealed])
+
+  if (!id) {
+    return null
+  }
+
+  const cardsById = new Map((snapshot?.cards ?? []).map((card) => [card.id, card]))
+  const revlogs: LocalRevlog[] = [...(snapshot?.revlogs ?? [])].sort(
+    (a, b) => b.reviewedAt.getTime() - a.reviewedAt.getTime(),
+  )
+
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div className="flex flex-wrap items-center gap-3">
@@ -179,6 +276,18 @@ export function ReviewSection() {
           )}
           <Button
             type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setShowHistory((value) => !value)}
+          >
+            <IconHistory className="size-4" />
+            History
+          </Button>
+          <Button type="button" variant="outline" size="sm" onClick={() => setSrsOpen(true)}>
+            SRS
+          </Button>
+          <Button
+            type="button"
             variant="brand"
             size="sm"
             disabled={dueCards.length === 0}
@@ -189,6 +298,35 @@ export function ReviewSection() {
           </Button>
         </div>
       </div>
+
+      {showHistory && (
+        <div className="rounded-lg border bg-card p-4">
+          <p className="mb-2 text-sm font-medium">Recent reviews</p>
+          {revlogs.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No reviews yet.</p>
+          ) : (
+            <div className="space-y-1.5">
+              {revlogs.slice(0, 30).map((revlog) => {
+                const card = cardsById.get(revlog.cardId)
+                return (
+                  <div key={revlog.id} className="flex items-center justify-between gap-3 text-sm">
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">{card?.front || revlog.cardId}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(revlog.reviewedAt).toLocaleString()} ·{" "}
+                        {formatDuration(revlog.durationMs)}
+                      </p>
+                    </div>
+                    <Badge variant="outline" className={RATING_BADGE_CLASS[revlog.rating]}>
+                      {revlog.rating}
+                    </Badge>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
       {queue === null && (
         <p className="text-sm text-muted-foreground">
@@ -226,6 +364,13 @@ export function ReviewSection() {
             </div>
           </div>
 
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-primary transition-all"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
           <div className="min-h-52 rounded-xl border bg-card p-6">
             <div className="prose prose-sm dark:prose-invert max-w-none">
               <ReactMarkdown>{currentCard.front}</ReactMarkdown>
@@ -240,34 +385,44 @@ export function ReviewSection() {
           </div>
 
           {!revealed ? (
-            <div className="flex justify-center">
+            <div className="flex flex-col items-center gap-2">
               <Button type="button" variant="brand" onClick={() => setRevealed(true)}>
                 Show answer
               </Button>
+              <p className="text-xs text-muted-foreground">
+                Press <kbd className="rounded border bg-muted px-1">Space</kbd> to reveal
+              </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {RATINGS.map((rating) => (
-                <Button
-                  key={rating.value}
-                  type="button"
-                  className={rating.className}
-                  onClick={() => void rateCard(rating.value)}
-                >
-                  {rating.label}
-                </Button>
-              ))}
+            <div className="space-y-2">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {RATINGS.map((rating) => (
+                  <Button
+                    key={rating.value}
+                    type="button"
+                    className={rating.className}
+                    onClick={() => void rateCard(rating.value)}
+                  >
+                    {rating.label}
+                    <kbd className="ml-1 rounded border border-current/30 bg-black/5 px-1 text-xs dark:bg-white/10">
+                      {RATING_SHORTCUTS[rating.value]}
+                    </kbd>
+                  </Button>
+                ))}
+              </div>
+              <RatingCounters counts={ratingCounts} />
             </div>
           )}
         </div>
       )}
 
       {completed && (
-        <div className="space-y-3 rounded-xl border bg-card p-6 text-center">
+        <div className="space-y-4 rounded-xl border bg-card p-6 text-center">
           <p className="font-medium">Session complete</p>
           <p className="text-sm text-muted-foreground">
             You reviewed {queue?.length ?? 0} cards. Come back when the next ones are due.
           </p>
+          <RatingCounters counts={ratingCounts} />
           <div className="flex justify-center gap-2">
             <Button type="button" variant="outline" size="sm" onClick={rollbackLast}>
               <IconRotate className="size-4" />
@@ -279,6 +434,13 @@ export function ReviewSection() {
           </div>
         </div>
       )}
+
+      <SrsSettingsDialog
+        notebase={snapshot?.notebase}
+        open={srsOpen}
+        onOpenChange={setSrsOpen}
+        onSaved={reload}
+      />
     </div>
   )
 }

@@ -17,6 +17,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/base-ui/sidebar"
+import { LOCAL_NOTEBASE_PAGE_PATH } from "@/utils/constants/local-notebase"
 import { TRANSLATION_HUB_PAGE_PATH } from "@/utils/constants/translation-hub"
 import { i18n } from "@/utils/i18n"
 
@@ -147,6 +148,22 @@ export function FeaturesNav() {
             >
               <Icon icon="tabler:language-hiragana" />
               <span>{i18n.t("options.tools.translationHub")}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              render={
+                <a
+                  href={browser.runtime.getURL(LOCAL_NOTEBASE_PAGE_PATH)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              }
+              tooltip={i18n.t("options.tools.notebase")}
+            >
+              <Icon icon="tabler:notebook" />
+              <span>{i18n.t("options.tools.notebase")}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

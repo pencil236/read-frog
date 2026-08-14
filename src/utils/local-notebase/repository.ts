@@ -103,6 +103,8 @@ export interface LocalNotebaseRepository {
 
   listCards(notebaseId: string, templateId?: string): Promise<LocalCard[]>
   generateCards(notebaseId: string, templateId?: string): Promise<{ created: number }>
+  updateCard(cardId: string, patch: { front?: string; back?: string }): Promise<LocalCard>
+  deleteCard(cardId: string): Promise<void>
 
   reviewCard(
     cardId: string,
@@ -501,6 +503,38 @@ export class LocalNotebaseRepositoryImpl implements LocalNotebaseRepository {
       }
       return { created }
     })
+  }
+
+  async updateCard(cardId: string, patch: { front?: string; back?: string }): Promise<LocalCard> {
+    const snapshot = await this.findSnapshotForCard(cardId)
+    if (!snapshot) {
+      throw new Error(`Card not found: ${cardId}`)
+    }
+    const card = snapshot.cards.find((item) => item.id === cardId)
+    if (!card) {
+      throw new Error(`Card not found: ${cardId}`)
+    }
+
+    if (patch.front !== undefined) {
+      card.front = patch.front
+    }
+    if (patch.back !== undefined) {
+      card.back = patch.back
+    }
+    card.updatedAt = new Date()
+    await this.store.saveSnapshot(snapshot)
+    return card
+  }
+
+  async deleteCard(cardId: string): Promise<void> {
+    const snapshot = await this.findSnapshotForCard(cardId)
+    if (!snapshot) {
+      throw new Error(`Card not found: ${cardId}`)
+    }
+
+    snapshot.cards = snapshot.cards.filter((card) => card.id !== cardId)
+    snapshot.revlogs = snapshot.revlogs.filter((revlog) => revlog.cardId !== cardId)
+    await this.store.saveSnapshot(snapshot)
   }
 
   async reviewCard(

@@ -97,6 +97,7 @@ options:
     product: Product
   tools:
     translationHub: Translation Hub
+    notebase: Notebase
   product:
     roadmap: Roadmap
   helpAndCommunity:
