@@ -141,6 +141,28 @@ export default defineConfig({
       //      reuses for autocomplete/type-checking at every `i18n.t('key')` call site.
       // Runtime UI string lookup itself no longer goes through @wxt-dev/i18n.
       ViteYaml(),
+      // Chrome rejects unpacked content scripts whose files contain raw Unicode
+      // noncharacters (e.g. the U+FFFF sentinel shipped by temml via defuddle)
+      // with a misleading "file is not UTF-8" error. Escaping them keeps the
+      // runtime string values identical while making the emitted files valid.
+      {
+        name: "escape-unicode-noncharacters",
+        apply: "build",
+        generateBundle(_options, bundle) {
+          const nonCharacterRe = /[\uFDD0-\uFDEF\uFFFE\uFFFF]/gu
+          for (const file of Object.values(bundle)) {
+            if (file.type !== "chunk" || typeof file.code !== "string") {
+              continue
+            }
+            if (nonCharacterRe.test(file.code)) {
+              file.code = file.code.replace(
+                nonCharacterRe,
+                (char) => `\\u${char.codePointAt(0)!.toString(16).padStart(4, "0")}`,
+              )
+            }
+          }
+        },
+      },
       ...(configEnv.mode === "production"
         ? [
             {

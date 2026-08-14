@@ -1,4 +1,8 @@
 import { vi } from "vitest"
+// Polyfill IndexedDB before any test module imports Dexie. Import order in
+// individual test files is not reliable (lint-staged reorders side-effect
+// imports), and Dexie captures its IndexedDB dependency at module load.
+import "fake-indexeddb/auto"
 import "@testing-library/jest-dom"
 
 // Keep test output quiet by default. Individual tests can still spy on these
