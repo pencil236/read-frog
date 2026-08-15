@@ -3,12 +3,11 @@
 [![Read Frog banner][image-banner]][website]
 
 <p align="center">
-  <a href="https://trendshift.io/repositories/22377" target="_blank"><img src="https://trendshift.io/api/badge/repositories/22377" alt="mengxi-ream%2Fread-frog | Trendshift" width="250" height="55" /></a>
-  <a href="https://www.star-history.com/mengxi-ream/read-frog">
+  <a href="https://www.star-history.com/pencil236/read-frog">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/badge?repo=mengxi-ream/read-frog&theme=dark" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/badge?repo=mengxi-ream/read-frog" />
-      <img alt="Star History Rank" src="https://api.star-history.com/badge?repo=mengxi-ream/read-frog" width="260" height="55" />
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/badge?repo=pencil236/read-frog&theme=dark" />
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/badge?repo=pencil236/read-frog" />
+      <img alt="Star History Rank" src="https://api.star-history.com/badge?repo=pencil236/read-frog" width="260" height="55" />
     </picture>
   </a>
 </p>
@@ -17,25 +16,22 @@
 支持沉浸式翻译、文章分析、多种 AI 模型等功能。<br/>
 在浏览器中利用 AI 轻松深入地掌握语言。
 
+> **本地笔记库版** —— 基于 [Read Frog](https://github.com/mengxi-ream/read-frog) 的分支，新增**完全本地的生词库、闪卡与复习**：
+> 生词保存在你指定的文件夹（纯 JSON 文件），无需登录账号，没有条数限制。
+>
+> ⬇️ 下载：[GitHub Releases](https://github.com/pencil236/read-frog/releases)
+
 [![English][english-shield]](../README.md) [![简体中文][chinese-shield]](./README.zh-CN.md) [![繁體中文][traditional-chinese-shield]](./README.zh-TW.md) [![日本語][japanese-shield]](./README.ja.md) [![한국어][korean-shield]](./README.ko.md) [![Español][spanish-shield]](./README.es.md) [![Русский][russian-shield]](./README.ru.md) [![Türkçe][turkish-shield]](./README.tr.md) [![Tiếng Việt][vietnamese-shield]](./README.vi.md)
 
-[官方网站](https://readfrog.app) · [教程](https://www.readfrog.app/zh/docs) · [更新日志][github-release-link] · [博客](https://www.readfrog.app/zh/blog)
+[GitHub Releases][github-release-link] · [问题反馈][issues-link] · [原项目](https://github.com/mengxi-ream/read-frog)
 
 <!-- SHIELD GROUP -->
 
 [![Release version badge][extension-release-shield]][github-release-link]
-[![Chrome version badge][chrome-version-shield]][chrome-store-link]
-[![Edge version badge][edge-version-shield]][edge-store-link]
-[![Firefox version badge][firefox-version-shield]][firefox-store-link]<br/>
-[![Discord badge][discord-shield]][discord-link]
-[![Chrome users badge][chrome-users-shield]][chrome-store-link]
-[![Edge users badge][edge-users-shield]][edge-store-link]
-[![Firefox users badge][firefox-users-shield]][firefox-store-link]<br/>
 [![Stars badge][star-history-shield]][star-history-link]
 [![Contributors badge][contributors-shield]][contributors-link]
 ![Last commit badge][last-commit-shield]
 [![Issues badge][issues-shield]][issues-link]<br/>
-[![Sponsor badge][sponsor-shield]][sponsor-link]
 
 </div>
 
@@ -45,10 +41,11 @@
 #### 目录
 
 - [📺 演示](#-演示)
-- [👋🏻 快速开始 \& 加入我们的社区](#-快速开始--加入我们的社区)
+- [👋🏻 快速开始](#-快速开始)
   - [下载](#下载)
-  - [社区](#社区)
 - [✨ 功能](#-功能)
+  - [🪄 自定义 AI 指令](#-自定义-ai-指令)
+  - [🧠 本地闪卡与间隔重复](#-本地闪卡与间隔重复)
   - [🔄 双语 / 仅译文](#-双语--仅译文)
   - [✨ 划词翻译](#-划词翻译)
   - [🧠 上下文感知翻译](#-上下文感知翻译)
@@ -58,8 +55,6 @@
   - [🤖 20+ AI 服务商](#-20-ai-服务商)
 - [🤝 贡献](#-贡献)
   - [贡献代码](#贡献代码)
-- [📜 商业授权](#-商业授权)
-- [❤️ 赞助者](#️-赞助者)
 
 <br/>
 
@@ -72,25 +67,20 @@
   <img src="../assets/page-translation-demo.gif" width="60%" alt="Read Frog 翻译界面" />
 </div>
 
-## 👋🏻 快速开始 & 加入我们的社区
+## 👋🏻 快速开始
 
-Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智能化和个性化的语言学习体验。这在 AI 时代已成为可能，但市场上很少有产品满足这一需求。因此，我们决定自己动手，最终让世界不再依赖人类语言教师。
-
-无论您是用户还是开发者，Read Frog 都将是您实现这一愿景的方式。请注意，Read Frog 目前正在积极开发中，欢迎对遇到的任何[问题][issues-link]提供反馈。
+本分支保留了 Read Frog 的全部原版功能（沉浸式翻译、划词工具、字幕、朗读等），并新增完全本地的生词工作流：生词库、闪卡、复习都在本机完成，无需账号、没有条数限制。
 
 ### 下载
 
-| 浏览器  | 版本                                                                   | 下载                                                             |
-| ------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Chrome  | [![Chrome version badge][chrome-version-shield]][chrome-store-link]    | [Chrome 应用商店][chrome-store-link] 或 [中国镜像][crxsoso-link] |
-| Edge    | [![Edge version badge][edge-version-shield]][edge-store-link]          | [Microsoft Edge 插件商店][edge-store-link]                       |
-| Firefox | [![Firefox version badge][firefox-version-shield]][firefox-store-link] | [Firefox 附加组件][firefox-store-link]                           |
+本版通过 [GitHub Releases][github-release-link] 分发（未上架各浏览器官方商店）。
 
-### 社区
+| 安装包                            | 安装方式                                                                                                                                                   |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **本地版 zip**                    | 解压后打开 `chrome://extensions`（Edge 用 `edge://extensions`），开启右上角“开发者模式”，点“加载已解压的扩展程序”，选择解压出的 `read-frog-local` 文件夹。 |
+| **双击启动版**（同一 Release 内） | 无需开发者模式：解压后，每次都从包内的 `启动ReadFrog-Chrome.bat` / `启动ReadFrog-Edge.bat` 启动浏览器即可。                                                |
 
-| [![Discord badge][discord-shield-badge]][discord-link] | 在 Discord 中提问，与开发者交流。              |
-| :----------------------------------------------------- | :--------------------------------------------- |
-| [![WeChat badge][wechat-shield-badge]][wechat-link]    | 如果您在中国大陆，可以添加微信账号加入微信群。 |
+遇到问题或有建议？欢迎[提 issue][issues-link]。
 
 > \[!IMPORTANT]
 >
@@ -103,11 +93,11 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
   <kbd>Star 历史</kbd>
 </summary>
 
-<a href="https://www.star-history.com/?type=timeline&repos=mengxi-ream%2Fread-frog">
+<a href="https://www.star-history.com/?type=timeline&repos=pencil236%2Fread-frog">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=mengxi-ream/read-frog&type=timeline&theme=dark&legend=top-left&sealed_token=vUW24BwE2sgnq-CzlWEAT6gnzZqNrXl9ai4A05Pc3CQcPGdBqbts3tq5VRWEerfrqVdonsJasb04WcKd5AKSSCjlsdj_TwyI3j9xytMG4FQNw7yXDe9IUA" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=mengxi-ream/read-frog&type=timeline&legend=top-left&sealed_token=vUW24BwE2sgnq-CzlWEAT6gnzZqNrXl9ai4A05Pc3CQcPGdBqbts3tq5VRWEerfrqVdonsJasb04WcKd5AKSSCjlsdj_TwyI3j9xytMG4FQNw7yXDe9IUA" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=mengxi-ream/read-frog&type=timeline&legend=top-left&sealed_token=vUW24BwE2sgnq-CzlWEAT6gnzZqNrXl9ai4A05Pc3CQcPGdBqbts3tq5VRWEerfrqVdonsJasb04WcKd5AKSSCjlsdj_TwyI3j9xytMG4FQNw7yXDe9IUA" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=pencil236/read-frog&type=timeline&theme=dark&legend=top-left&sealed_token=vUW24BwE2sgnq-CzlWEAT6gnzZqNrXl9ai4A05Pc3CQcPGdBqbts3tq5VRWEerfrqVdonsJasb04WcKd5AKSSCjlsdj_TwyI3j9xytMG4FQNw7yXDe9IUA" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=pencil236/read-frog&type=timeline&legend=top-left&sealed_token=vUW24BwE2sgnq-CzlWEAT6gnzZqNrXl9ai4A05Pc3CQcPGdBqbts3tq5VRWEerfrqVdonsJasb04WcKd5AKSSCjlsdj_TwyI3j9xytMG4FQNw7yXDe9IUA" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=pencil236/read-frog&type=timeline&legend=top-left&sealed_token=vUW24BwE2sgnq-CzlWEAT6gnzZqNrXl9ai4A05Pc3CQcPGdBqbts3tq5VRWEerfrqVdonsJasb04WcKd5AKSSCjlsdj_TwyI3j9xytMG4FQNw7yXDe9IUA" />
  </picture>
 </a>
 
@@ -135,11 +125,14 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
 
 </div>
 
-### 🧠 [闪卡与间隔重复][docs-tutorial]
+### 🧠 [本地闪卡与间隔重复][docs-tutorial]
 
-将阅读中遇到的词汇、释义、例句、翻译和笔记保存到 Notebase，再通过可自定义的卡片模板生成闪卡。阅读时发现的内容可以自然地变成学习材料，不会打断阅读流程。
+将阅读中遇到的词汇、释义、例句、翻译和笔记保存到**本地笔记库**，再通过可自定义的卡片模板生成闪卡。所有数据都保存在你指定的文件夹（纯 JSON 文件）——**无需账号，没有条数限制**。
 
-在线复习到期卡片，并选择**重来**、**困难**、**良好**或**简单**。Read Frog 的间隔重复调度器会根据你的反馈安排下一次复习，让卡片在你即将遗忘之前再次出现。
+- 词典结果直接从划词工具栏保存，每个新词都会自动生成闪卡。
+- 复习到期卡片并选择**重来**、**困难**、**良好**或**简单**；FSRS 调度器决定每张卡何时再次出现。
+- 笔记行、卡片、复习页都有朗读按钮，可对单词发音。
+- 支持表格 / 看板 / 画廊视图、筛选排序，以及可调的 SRS 设置。
 
 <div align="right">
 
@@ -257,9 +250,7 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
 
 查看[贡献指南](https://readfrog.app/zh/docs/code-contribution/contribution-guide)了解更多详情。
 
-ReadFrog 采用 GPLv3 和商业许可双重授权。
-
-贡献者许可条款请参阅 [CONTRIBUTING.md](../CONTRIBUTING.md)。
+本分支以 GPL-3.0 协议发布（见 [LICENSE](../LICENSE)）。上游原项目采用 GPLv3 和商业许可双重授权。
 
 <a href="https://github.com/mengxi-ream/read-frog/graphs/contributors">
   <table>
@@ -293,71 +284,31 @@ ReadFrog 采用 GPLv3 和商业许可双重授权。
 
 </div>
 
-## 📜 商业授权
-
-<img src="../assets/tabbit.avif" alt="Tabbit" height="20" /> **美团 Tabbit 浏览器团队**：**免费**授权闭源商业使用，授权范围限于 v1.21.3 及之前的版本（commit [`724863f`](https://github.com/mengxi-ream/read-frog/commit/724863fdbc2d777766cada6c111235534ee03ca0)）。授权日期：2026 年 3 月 3 日上午 9:00（温哥华时间，UTC-8）。
-
-<div align="right">
-
-[![Back to top][back-to-top]](#readme-top)
-
-</div>
-
-## ❤️ 赞助者
-
-每一笔捐赠都帮助我们构建更好的语言学习体验。感谢您支持我们的使命！
-
-[![Sponsors][sponsor-image]][sponsor-link]
-
-<div align="right">
-
-[![Back to top][back-to-top]](#readme-top)
-
-</div>
-
 <!-- LINK GROUP -->
 
 [back-to-top]: https://img.shields.io/badge/-回到顶部-151515?style=flat-square
-[chrome-store-link]: https://chromewebstore.google.com/detail/read-frog-open-source-ai/modkelfkcfjpgbfmnbnllalkiogfofhb
-[chrome-users-shield]: https://img.shields.io/chrome-web-store/users/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&label=Chrome%20用户&color=yellow&labelColor=black
-[chrome-version-shield]: https://img.shields.io/chrome-web-store/v/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&label=Chrome%20版本&labelColor=black&color=yellow
-[contributors-link]: https://github.com/mengxi-ream/read-frog/graphs/contributors
-[contributors-shield]: https://img.shields.io/github/contributors/mengxi-ream/read-frog?style=flat-square&labelColor=black
-[crxsoso-link]: https://www.crxsoso.com/webstore/detail/modkelfkcfjpgbfmnbnllalkiogfofhb
+[contributors-link]: https://github.com/pencil236/read-frog/graphs/contributors
+[contributors-shield]: https://img.shields.io/github/contributors/pencil236/read-frog?style=flat-square&labelColor=black
 [chinese-shield]: https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-gray?style=flat-square
-[discord-link]: https://discord.gg/ej45e3PezJ
-[discord-shield]: https://img.shields.io/discord/1371229720942874646?style=flat-square&label=Discord&logo=discord&logoColor=white&color=5865F2&labelColor=black
-[discord-shield-badge]: https://img.shields.io/badge/聊天-Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white&labelColor=black
-[edge-store-link]: https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo
 [english-shield]: https://img.shields.io/badge/English-gray?style=flat-square
-[firefox-store-link]: https://addons.mozilla.org/firefox/addon/read-frog-open-ai-translator/
-[firefox-version-shield]: https://img.shields.io/amo/v/read-frog-open-ai-translator?style=flat-square&label=Firefox%20版本&labelColor=black&color=orange
-[firefox-users-shield]: https://img.shields.io/amo/users/read-frog-open-ai-translator?style=flat-square&label=Firefox%20用户&color=orange&labelColor=black
-[edge-users-shield]: https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Edge%20用户&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo&labelColor=black
-[edge-version-shield]: https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Edge%20版本&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo&labelColor=black&prefix=v
-[extension-release-shield]: https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=package.json&style=flat-square&label=最新版本&color=brightgreen&labelColor=black
-[github-release-link]: https://github.com/mengxi-ream/read-frog/releases
-[github-star-link]: https://github.com/mengxi-ream/read-frog/stargazers
+[extension-release-shield]: https://img.shields.io/github/v/release/pencil236/read-frog?include_prereleases&style=flat-square&label=最新版本&color=brightgreen&labelColor=black
+[github-release-link]: https://github.com/pencil236/read-frog/releases
+[github-star-link]: https://github.com/pencil236/read-frog/stargazers
 [image-banner]: ../assets/banner-zh.png
-[sponsor-image]: https://cdn.jsdelivr.net/gh/mengxi-ream/static/sponsorkit/sponsors.svg
 [image-star]: ../assets/star.png
-[issues-link]: https://github.com/mengxi-ream/read-frog/issues
-[issues-shield]: https://img.shields.io/github/issues/mengxi-ream/read-frog?style=flat-square&labelColor=black
+[issues-link]: https://github.com/pencil236/read-frog/issues
+[issues-shield]: https://img.shields.io/github/issues/pencil236/read-frog?style=flat-square&labelColor=black
 [japanese-shield]: https://img.shields.io/badge/%E6%97%A5%E6%9C%AC%E8%AA%9E-gray?style=flat-square
 [korean-shield]: https://img.shields.io/badge/%ED%95%9C%EA%B5%AD%EC%96%B4-gray?style=flat-square
-[last-commit-shield]: https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square&label=commit&labelColor=black
+[last-commit-shield]: https://img.shields.io/github/last-commit/pencil236/read-frog?style=flat-square&label=commit&labelColor=black
 [russian-shield]: https://img.shields.io/badge/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9-gray?style=flat-square
-[sponsor-link]: https://github.com/sponsors/mengxi-ream
-[sponsor-shield]: https://img.shields.io/github/sponsors/mengxi-ream?style=flat-square&label=赞助&color=EA4AAA&labelColor=black
 [spanish-shield]: https://img.shields.io/badge/Espa%C3%B1ol-gray?style=flat-square
-[star-history-link]: https://www.star-history.com/#mengxi-ream/read-frog&Timeline
-[star-history-shield]: https://img.shields.io/github/stars/mengxi-ream/read-frog?style=flat-square&label=stars&color=yellow&labelColor=black
+[star-history-link]: https://www.star-history.com/#pencil236/read-frog&Timeline
+[star-history-shield]: https://img.shields.io/github/stars/pencil236/read-frog?style=flat-square&label=stars&color=yellow&labelColor=black
 [traditional-chinese-shield]: https://img.shields.io/badge/%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87-gray?style=flat-square
 [turkish-shield]: https://img.shields.io/badge/T%C3%BCrk%C3%A7e-gray?style=flat-square
 [vietnamese-shield]: https://img.shields.io/badge/Ti%E1%BA%BFng%20Vi%E1%BB%87t-gray?style=flat-square
 [website]: https://readfrog.app
-[wechat-link]: ../assets/wechat-account.jpg
-[wechat-shield-badge]: https://img.shields.io/badge/聊天-微信-07C160?style=for-the-badge&logo=wechat&logoColor=white&labelColor=black
 
 <!-- Feature docs link -->
 
