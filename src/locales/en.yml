@@ -1199,6 +1199,7 @@ action:
   saveToNotebaseSuccess: Saved to Notebase
   saveToNotebaseFailed: Failed to save to Notebase
   saveToNotebaseFolderRequired: Choose a storage folder first in Notebase → Storage, then save again.
+  saveToNotebasePermissionRequired: The storage folder permission has expired. Reauthorize it in Notebase → Storage, then save again.
   openStorageSettings: Open Storage settings
   saveToNotebaseLoginRequired: Log in on readfrog.app to save to Notebase
   saveToNotebaseAccessDenied: This account cannot access the selected Notebase
@@ -1613,6 +1614,10 @@ notebase:
     importJson: Import JSON
     directorySelected: Directory selected
     selectDirectoryFailed: Failed to select directory
+    permissionLostTitle: Storage permission expired
+    permissionLostDescription: Your browser may have revoked access to this folder. Reauthorize it to keep saving your notes.
+    reauthorize: Reauthorize
+    reauthorizeFailed: Reauthorization failed. Try choosing the folder again.
     exportFailed: Export failed
     imported: Imported $1 notebases
     importFailed: Import failed

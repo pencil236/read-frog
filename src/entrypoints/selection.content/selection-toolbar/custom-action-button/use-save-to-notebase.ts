@@ -10,6 +10,7 @@ import {
   getLocalNotebaseStorageUrl,
 } from "@/utils/constants/local-notebase"
 import { i18n } from "@/utils/i18n"
+import { showNotebaseStorageGuidanceToast } from "@/utils/local-notebase/save-errors"
 import { sendMessage } from "@/utils/message"
 import { saveToNotebaseDialogAtom } from "./save-to-notebase-dialog-atom"
 
@@ -56,6 +57,9 @@ export function useSaveToNotebase() {
   }
 
   const handleSaveError = (error: unknown) => {
+    if (showNotebaseStorageGuidanceToast(error)) {
+      return
+    }
     toastManager.add({
       type: "error",
       title: i18n.t("action.saveToNotebaseFailed"),

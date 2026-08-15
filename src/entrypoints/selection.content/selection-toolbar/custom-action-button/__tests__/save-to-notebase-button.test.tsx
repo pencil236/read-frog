@@ -6,6 +6,7 @@ import { createStore, Provider } from "jotai"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { configAtom } from "@/utils/atoms/config"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
+import { LOCAL_NOTEBASE_FOLDER_PERMISSION_DENIED } from "@/utils/constants/local-notebase"
 import { i18n } from "@/utils/i18n"
 import {
   createDefaultLocalNotebaseStore,
@@ -259,5 +260,41 @@ describe("saveToNotebaseButton (local)", () => {
     expect(
       screen.queryByRole("heading", { name: i18n.t("action.saveToNotebaseCreateTitle") }),
     ).toBeNull()
+  })
+
+  it("guides to storage settings when the folder permission has expired", async () => {
+    const repository = createLocalNotebaseRepository()
+    const notebase = await repository.createNotebase({
+      name: "Dictionary",
+      columns: [
+        { name: "Term", config: { type: "string" } },
+        { name: "Definition", config: { type: "string" } },
+      ],
+      createDefaultTemplate: true,
+    })
+    const action = { ...createAction(), localNotebaseId: notebase.id }
+
+    vi.mocked(sendMessage).mockImplementationOnce((async () => ({
+      folderChosen: true,
+      location: null,
+    })) as unknown as typeof sendMessage)
+    vi.mocked(sendMessage).mockImplementationOnce(async () => {
+      throw new Error(LOCAL_NOTEBASE_FOLDER_PERMISSION_DENIED)
+    })
+
+    await setup(action, { Term: "world", Definition: "世界" })
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("action.saveToNotebase") }))
+
+    await waitFor(() => {
+      expect(toastManagerMock.add).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: "error",
+          description: i18n.t("action.saveToNotebasePermissionRequired"),
+          actionProps: expect.objectContaining({
+            children: i18n.t("action.openStorageSettings"),
+          }),
+        }),
+      )
+    })
   })
 })

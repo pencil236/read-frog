@@ -1,6 +1,13 @@
+import {
+  LOCAL_NOTEBASE_FOLDER_PERMISSION_DENIED,
+  LOCAL_NOTEBASE_FOLDER_REQUIRED,
+} from "@/utils/constants/local-notebase"
 import { createColumnConfig } from "@/utils/local-notebase/render"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
-import { getStoredDirectoryLocation } from "@/utils/local-notebase/storage/directory"
+import {
+  getStoredDirectoryHandle,
+  getStoredDirectoryLocation,
+} from "@/utils/local-notebase/storage/directory"
 
 export interface CreateLocalNotebaseFromRequestData {
   name: string
@@ -12,6 +19,50 @@ export interface CreateLocalNotebaseFromRequestData {
 export interface AppendLocalNotebaseRowsData {
   notebaseId: string
   results: Array<Record<string, unknown>>
+}
+
+type DirectoryPermissionState = "granted" | "denied" | "prompt"
+
+interface PermissionAwareDirectoryHandle extends FileSystemDirectoryHandle {
+  queryPermission?: (descriptor: {
+    mode: "read" | "readwrite"
+  }) => Promise<DirectoryPermissionState>
+  requestPermission?: (descriptor: {
+    mode: "read" | "readwrite"
+  }) => Promise<DirectoryPermissionState>
+}
+
+/**
+ * Chromium drops readwrite access to a persisted directory handle after the
+ * browser restarts (and in some cases when the handle is used from a new
+ * context like the offscreen document). `getDirectoryHandle` then throws
+ * "not allowed by the user agent". Re-request readwrite permission explicitly
+ * before touching the folder, and fail with a recognizable code when the user
+ * must re-authorize the folder in the visible Storage page.
+ */
+export async function ensureDirectoryWritePermission(): Promise<FileSystemDirectoryHandle> {
+  const handle = await getStoredDirectoryHandle()
+  if (!handle) {
+    throw new Error(LOCAL_NOTEBASE_FOLDER_REQUIRED)
+  }
+
+  const permissionAware = handle as PermissionAwareDirectoryHandle
+  let permission: DirectoryPermissionState = "granted"
+  try {
+    if (typeof permissionAware.queryPermission === "function") {
+      permission = await permissionAware.queryPermission({ mode: "readwrite" })
+      if (permission !== "granted" && typeof permissionAware.requestPermission === "function") {
+        permission = await permissionAware.requestPermission({ mode: "readwrite" })
+      }
+    }
+  } catch {
+    throw new Error(LOCAL_NOTEBASE_FOLDER_PERMISSION_DENIED)
+  }
+
+  if (permission !== "granted") {
+    throw new Error(LOCAL_NOTEBASE_FOLDER_PERMISSION_DENIED)
+  }
+  return handle
 }
 
 /**

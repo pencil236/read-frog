@@ -1199,6 +1199,7 @@ action:
   saveToNotebaseSuccess: 已保存到笔记库
   saveToNotebaseFailed: 保存到笔记库失败
   saveToNotebaseFolderRequired: 请先到“笔记库 → 存储”页面选择存储文件夹，然后再保存。
+  saveToNotebasePermissionRequired: 存储文件夹的访问权限已失效，请到“笔记库 → 存储”页面重新授权或重新选择文件夹，然后再保存。
   openStorageSettings: 前往存储设置
   saveToNotebaseLoginRequired: 请先在 readfrog.app 登录后再保存到笔记库
   saveToNotebaseAccessDenied: 当前账号无法访问选中的笔记库
@@ -1613,6 +1614,10 @@ notebase:
     importJson: 导入 JSON
     directorySelected: 已选择文件夹
     selectDirectoryFailed: 选择文件夹失败
+    permissionLostTitle: 存储权限已失效
+    permissionLostDescription: 浏览器可能已收回对该文件夹的访问权限，请重新授权后继续保存笔记。
+    reauthorize: 重新授权
+    reauthorizeFailed: 重新授权失败，请尝试重新选择文件夹。
     exportFailed: 导出失败
     imported: 已导入 $1 个笔记库
     importFailed: 导入失败

@@ -21,6 +21,7 @@ import {
   replaceSelectionToolbarAction,
 } from "@/utils/custom-actions"
 import { i18n } from "@/utils/i18n"
+import { showNotebaseStorageGuidanceToast } from "@/utils/local-notebase/save-errors"
 import { logger } from "@/utils/logger"
 import { sendMessage } from "@/utils/message"
 import { getUniqueName } from "@/utils/name"
@@ -120,6 +121,9 @@ export function SaveToNotebaseDialogHost() {
       }
     },
     onError: (error: unknown) => {
+      if (showNotebaseStorageGuidanceToast(error)) {
+        return
+      }
       toastManager.add({
         type: "error",
         title: i18n.t("action.saveToNotebaseFailed"),

@@ -1199,6 +1199,7 @@ action:
   saveToNotebaseSuccess: 已儲存到筆記庫
   saveToNotebaseFailed: 儲存到筆記庫失敗
   saveToNotebaseFolderRequired: 請先到「筆記庫 → 儲存」頁面選擇儲存資料夾，然後再儲存。
+  saveToNotebasePermissionRequired: 儲存資料夾的存取權限已失效，請到「筆記庫 → 儲存」頁面重新授權或重新選擇資料夾，然後再儲存。
   openStorageSettings: 前往儲存設定
   saveToNotebaseLoginRequired: 請先到 readfrog.app 登入後再儲存到筆記庫
   saveToNotebaseAccessDenied: 目前帳號無法存取所選筆記庫
@@ -1613,6 +1614,10 @@ notebase:
     importJson: 匯入 JSON
     directorySelected: 已選擇資料夾
     selectDirectoryFailed: 選擇資料夾失敗
+    permissionLostTitle: 儲存權限已失效
+    permissionLostDescription: 瀏覽器可能已收回對該資料夾的存取權限，請重新授權後繼續儲存筆記。
+    reauthorize: 重新授權
+    reauthorizeFailed: 重新授權失敗，請嘗試重新選擇資料夾。
     exportFailed: 匯出失敗
     imported: 已匯入 $1 個筆記庫
     importFailed: 匯入失敗

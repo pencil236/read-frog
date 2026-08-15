@@ -20,6 +20,31 @@ interface DirectoryContents {
   notebaseFiles: string[]
 }
 
+type DirectoryPermissionState = "granted" | "denied" | "prompt"
+
+interface PermissionAwareDirectoryHandle extends FileSystemDirectoryHandle {
+  queryPermission?: (descriptor: {
+    mode: "read" | "readwrite"
+  }) => Promise<DirectoryPermissionState>
+  requestPermission?: (descriptor: {
+    mode: "read" | "readwrite"
+  }) => Promise<DirectoryPermissionState>
+}
+
+async function queryDirectoryPermission(
+  handle: FileSystemDirectoryHandle,
+): Promise<DirectoryPermissionState> {
+  const permissionAware = handle as PermissionAwareDirectoryHandle
+  if (typeof permissionAware.queryPermission !== "function") {
+    return "granted"
+  }
+  try {
+    return await permissionAware.queryPermission({ mode: "readwrite" })
+  } catch {
+    return "prompt"
+  }
+}
+
 async function readDirectoryContents(
   root: FileSystemDirectoryHandle,
 ): Promise<DirectoryContents | null> {
@@ -49,12 +74,14 @@ async function readDirectoryContents(
 export function StoragePage() {
   const [handleName, setHandleName] = useState<string | null>(null)
   const [contents, setContents] = useState<DirectoryContents | null>(null)
+  const [permissionState, setPermissionState] = useState<DirectoryPermissionState | null>(null)
   const [busy, setBusy] = useState(false)
 
   const refresh = useCallback(async () => {
     const handle = await getStoredDirectoryHandle()
     setHandleName(handle?.name ?? null)
     setContents(handle ? await readDirectoryContents(handle) : null)
+    setPermissionState(handle ? await queryDirectoryPermission(handle) : null)
   }, [])
 
   useEffect(() => {
@@ -69,6 +96,7 @@ export function StoragePage() {
       await ensureReadmeFile(readFrogRoot)
       setHandleName(handle.name)
       setContents(await readDirectoryContents(handle))
+      setPermissionState("granted")
       toastManager.add({
         type: "success",
         title: i18n.t("notebase.storage.directorySelected"),
@@ -91,6 +119,43 @@ export function StoragePage() {
     await clearStoredDirectoryHandle()
     setHandleName(null)
     setContents(null)
+    setPermissionState(null)
+  }
+
+  const handleReauthorize = async () => {
+    const handle = await getStoredDirectoryHandle()
+    if (!handle) {
+      return
+    }
+    setBusy(true)
+    try {
+      const permissionAware = handle as PermissionAwareDirectoryHandle
+      const permission =
+        typeof permissionAware.requestPermission === "function"
+          ? await permissionAware.requestPermission({ mode: "readwrite" })
+          : "granted"
+      setPermissionState(permission)
+      if (permission === "granted") {
+        setContents(await readDirectoryContents(handle))
+        toastManager.add({
+          type: "success",
+          title: i18n.t("notebase.storage.directorySelected"),
+        })
+      } else {
+        toastManager.add({
+          type: "error",
+          title: i18n.t("notebase.storage.reauthorizeFailed"),
+        })
+      }
+    } catch {
+      setPermissionState("prompt")
+      toastManager.add({
+        type: "error",
+        title: i18n.t("notebase.storage.reauthorizeFailed"),
+      })
+    } finally {
+      setBusy(false)
+    }
   }
 
   const handleExport = async () => {
@@ -174,6 +239,14 @@ export function StoragePage() {
                 <AlertTitle>{i18n.t("notebase.storage.currentFolder")}</AlertTitle>
                 <AlertDescription>{handleName}</AlertDescription>
               </Alert>
+              {permissionState === "prompt" || permissionState === "denied" ? (
+                <Alert variant="destructive" className="w-full">
+                  <AlertTitle>{i18n.t("notebase.storage.permissionLostTitle")}</AlertTitle>
+                  <AlertDescription>
+                    {i18n.t("notebase.storage.permissionLostDescription")}
+                  </AlertDescription>
+                </Alert>
+              ) : null}
               {contents && (
                 <div className="w-full space-y-1 rounded-lg border bg-card p-3 font-mono text-xs">
                   <p className="font-sans text-sm font-medium">
@@ -208,6 +281,17 @@ export function StoragePage() {
               <Button type="button" variant="outline" size="sm" onClick={handleClearDirectory}>
                 {i18n.t("notebase.storage.removeFolder")}
               </Button>
+              {permissionState === "prompt" || permissionState === "denied" ? (
+                <Button
+                  type="button"
+                  variant="brand"
+                  size="sm"
+                  disabled={busy}
+                  onClick={handleReauthorize}
+                >
+                  {i18n.t("notebase.storage.reauthorize")}
+                </Button>
+              ) : null}
             </>
           ) : (
             <Alert className="w-full">

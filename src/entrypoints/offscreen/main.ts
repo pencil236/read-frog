@@ -1,6 +1,10 @@
 import { onMessage } from "@/utils/message"
 import { DOMAudioPlaybackController } from "@/utils/tts-playback/dom-audio-controller"
-import { appendLocalNotebaseRows, createLocalNotebaseFromRequest } from "./local-notebase-save"
+import {
+  appendLocalNotebaseRows,
+  createLocalNotebaseFromRequest,
+  ensureDirectoryWritePermission,
+} from "./local-notebase-save"
 
 const playbackController = new DOMAudioPlaybackController(
   "Failed to play audio in offscreen document",
@@ -16,9 +20,11 @@ onMessage("ttsOffscreenStop", async (message) => {
 })
 
 onMessage("localNotebaseOffscreenCreate", async (message) => {
+  await ensureDirectoryWritePermission()
   return createLocalNotebaseFromRequest(message.data)
 })
 
 onMessage("localNotebaseOffscreenAppend", async (message) => {
+  await ensureDirectoryWritePermission()
   return appendLocalNotebaseRows(message.data)
 })
