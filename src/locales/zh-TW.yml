@@ -1523,6 +1523,10 @@ notebase:
     localBadge: 本機
     updated: 更新於
     open: 開啟
+    delete: 刪除
+    deleteTitle: 刪除筆記庫？
+    deleteDescription: 將永久刪除該筆記庫及其全部詞條、卡片和複習記錄，無法復原。
+    deleted: 筆記庫已刪除
   columnType:
     string: 文字
     number: 數字

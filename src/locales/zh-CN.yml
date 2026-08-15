@@ -1523,6 +1523,10 @@ notebase:
     localBadge: 本地
     updated: 更新于
     open: 打开
+    delete: 删除
+    deleteTitle: 删除笔记库？
+    deleteDescription: 将永久删除该笔记库及其全部词条、卡片和复习记录，无法恢复。
+    deleted: 笔记库已删除
   columnType:
     string: 文本
     number: 数字

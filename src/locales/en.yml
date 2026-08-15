@@ -1523,6 +1523,10 @@ notebase:
     localBadge: local
     updated: Updated
     open: Open
+    delete: Delete
+    deleteTitle: Delete notebase?
+    deleteDescription: This permanently deletes the notebase and all of its rows, cards, and review history. This cannot be undone.
+    deleted: Notebase deleted
   columnType:
     string: Text
     number: Number
