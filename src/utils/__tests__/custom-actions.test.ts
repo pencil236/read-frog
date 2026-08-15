@@ -110,6 +110,19 @@ describe("selection toolbar built-in actions", () => {
     expect(duplicate.notebaseConnection?.mappings).not.toBe(dictionary.notebaseConnection?.mappings)
   })
 
+  it("persists and restores the local notebase binding for the built-in Dictionary", () => {
+    const selectionToolbar = cloneSelectionToolbar()
+    const dictionary = getBuiltInDictionaryAction(selectionToolbar)
+
+    const next = replaceSelectionToolbarAction(selectionToolbar, {
+      ...dictionary,
+      localNotebaseId: "notebase-local-1",
+    })
+
+    expect(next.builtInActions.dictionary.localNotebaseId).toBe("notebase-local-1")
+    expect(getBuiltInDictionaryAction(next).localNotebaseId).toBe("notebase-local-1")
+  })
+
   it("resolves the configured Note suggestion action even when it is disabled", () => {
     const selectionToolbar = cloneSelectionToolbar()
     const customAction = {

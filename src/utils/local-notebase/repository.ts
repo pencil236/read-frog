@@ -168,6 +168,21 @@ export class LocalNotebaseRepositoryImpl implements LocalNotebaseRepository {
       updatedAt: now,
     }))
 
+    const views: LocalNotebaseView[] = [
+      {
+        id: getRandomUUID(),
+        notebaseId: id,
+        name: "Default",
+        type: "table",
+        config: null,
+        filters: null,
+        sorts: null,
+        position: 0,
+        createdAt: now,
+        updatedAt: now,
+      },
+    ]
+
     const templates: LocalCardTemplate[] =
       input.createDefaultTemplate === false
         ? []
@@ -186,7 +201,7 @@ export class LocalNotebaseRepositoryImpl implements LocalNotebaseRepository {
       notebase,
       columns,
       rows,
-      views: [],
+      views,
       templates,
       cards: [],
       revlogs: [],

@@ -40,6 +40,11 @@ describe("LocalNotebaseRepositoryImpl (internal store)", () => {
     const templates = await repository.listTemplates(created.id)
     expect(templates).toHaveLength(1)
     expect(templates[0]!.config.type).toBe("basic")
+
+    const snapshot = await store.loadSnapshot(created.id)
+    expect(snapshot?.views).toHaveLength(1)
+    expect(snapshot?.views[0]!.type).toBe("table")
+    expect(snapshot?.views[0]!.name).toBe("Default")
   })
 
   it("adds rows, auto-generates cards and renders front/back", async () => {

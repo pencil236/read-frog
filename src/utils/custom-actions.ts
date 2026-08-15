@@ -27,6 +27,7 @@ export function getBuiltInDictionaryAction(
     enabled: state.enabled,
     providerId: state.providerId,
     ...(state.notebaseConnection ? { notebaseConnection: state.notebaseConnection } : {}),
+    ...(state.localNotebaseId ? { localNotebaseId: state.localNotebaseId } : {}),
   }
 }
 
@@ -66,6 +67,7 @@ function toBuiltInDictionaryState(
     enabled: action.enabled !== false,
     providerId: action.providerId,
     ...(action.notebaseConnection ? { notebaseConnection: action.notebaseConnection } : {}),
+    ...(action.localNotebaseId ? { localNotebaseId: action.localNotebaseId } : {}),
   }
 }
 

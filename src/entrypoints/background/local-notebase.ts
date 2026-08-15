@@ -14,6 +14,18 @@ export function setupLocalNotebaseMessageHandlers() {
   onMessage("localNotebaseCreate", async (message) => {
     const { name, columns, results, templateName } = message.data
     const repository = await getLocalNotebaseRepository()
+    // Reuse an existing notebase with the same name (e.g. the built-in
+    // Dictionary action) so repeated saves land in one default notebase
+    // instead of creating a new one every time the binding is missing.
+    const summaries = await repository.listNotebases()
+    const existing = summaries.find((summary) => summary.name === name)
+    if (existing) {
+      await repository.createRows(
+        existing.id,
+        results.map((cells) => ({ cells })),
+      )
+      return { notebaseId: existing.id, location: await getStoredDirectoryLocation() }
+    }
     const notebase = await repository.createNotebase({
       name,
       columns: columns.map((field) => ({
