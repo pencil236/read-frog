@@ -42,7 +42,7 @@ describe("LocalNotebaseRepositoryImpl (internal store)", () => {
     expect(templates[0]!.config.type).toBe("basic")
   })
 
-  it("adds rows, generates cards and renders front/back", async () => {
+  it("adds rows, auto-generates cards and renders front/back", async () => {
     const created = await createDictionaryNotebase()
     const [template] = await repository.listTemplates(created.id)
 
@@ -50,8 +50,6 @@ describe("LocalNotebaseRepositoryImpl (internal store)", () => {
       { cells: { Term: "hello", Definition: "你好", Phonetic: "/həˈləʊ/" } },
       { cells: { Term: "world", Definition: "世界", Phonetic: "/wɜːld/" } },
     ])
-    const { created: cardCount } = await repository.generateCards(created.id, template!.id)
-    expect(cardCount).toBe(2)
 
     const cards = await repository.listCards(created.id, template!.id)
     expect(cards).toHaveLength(2)
@@ -61,6 +59,19 @@ describe("LocalNotebaseRepositoryImpl (internal store)", () => {
     // Regenerating adds nothing new.
     const again = await repository.generateCards(created.id, template!.id)
     expect(again.created).toBe(0)
+  })
+
+  it("creates cards for initial rows when a default template is created", async () => {
+    const created = await repository.createNotebase({
+      name: "Dictionary",
+      columns: [{ name: "Term", config: { type: "string" } }],
+      initialRows: [{ cells: { Term: "hello" } }],
+      createDefaultTemplate: true,
+    })
+
+    const cards = await repository.listCards(created.id)
+    expect(cards).toHaveLength(1)
+    expect(cards[0]!.front).toBe("hello")
   })
 
   it("reviews a card, appends a revlog and rolls the review back", async () => {

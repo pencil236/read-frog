@@ -18,6 +18,7 @@ import { toastManager } from "@/components/ui/base-ui/toast"
 import { i18n } from "@/utils/i18n"
 import { renderPattern } from "@/utils/local-notebase/render"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
+import { SpeakButton } from "./components/speak-button"
 import { useNotebaseSnapshot } from "./lib"
 
 type TemplateDialogState = { mode: "create" } | { mode: "edit"; templateId: string } | null
@@ -325,6 +326,7 @@ export function TemplatesSection() {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
+                    <SpeakButton text={card.front} />
                     <Button
                       type="button"
                       variant="outline"

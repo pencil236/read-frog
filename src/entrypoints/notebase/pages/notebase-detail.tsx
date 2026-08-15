@@ -39,6 +39,7 @@ import { toastManager } from "@/components/ui/base-ui/toast"
 import { i18n } from "@/utils/i18n"
 import { createColumnConfig } from "@/utils/local-notebase/render"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
+import { SpeakButton } from "../components/speak-button"
 import { formatCellValue, useNotebaseSnapshot } from "../lib"
 import { SrsSettingsDialog } from "../srs-settings-dialog"
 
@@ -502,6 +503,9 @@ export function NotebaseDetailPage() {
               ))}
               <td className="px-3 py-1.5">
                 <div className="flex items-center gap-0.5">
+                  <SpeakButton
+                    text={primaryColumn ? formatCellValue(row.cells[primaryColumn.name]) : ""}
+                  />
                   <Button
                     type="button"
                     variant="ghost"
@@ -572,7 +576,11 @@ export function NotebaseDetailPage() {
             <p className="mb-2 text-sm font-medium">{key}</p>
             <div className="space-y-2">
               {groupRows.map((row) => (
-                <div key={row.id} className="rounded-md border bg-card p-3 text-sm">
+                <div key={row.id} className="relative rounded-md border bg-card p-3 text-sm">
+                  <SpeakButton
+                    text={primaryColumn ? formatCellValue(row.cells[primaryColumn.name]) : ""}
+                    className="absolute top-1.5 right-1.5"
+                  />
                   {columns.map((column) => (
                     <p key={column.id} className="truncate">
                       <span className="text-xs text-muted-foreground">{column.name}: </span>
@@ -591,8 +599,12 @@ export function NotebaseDetailPage() {
   const renderGallery = () => (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {displayRows.map((row) => (
-        <div key={row.id} className="rounded-lg border bg-card p-4">
-          <p className="mb-2 font-medium">
+        <div key={row.id} className="relative rounded-lg border bg-card p-4">
+          <SpeakButton
+            text={primaryColumn ? formatCellValue(row.cells[primaryColumn.name]) : ""}
+            className="absolute top-2 right-2"
+          />
+          <p className="mb-2 pr-8 font-medium">
             {primaryColumn ? formatCellValue(row.cells[primaryColumn.name]) || "—" : "—"}
           </p>
           {columns

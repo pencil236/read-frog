@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/base-ui/button"
 import { toastManager } from "@/components/ui/base-ui/toast"
 import { i18n } from "@/utils/i18n"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
+import { SpeakButton } from "./components/speak-button"
 import { useAsyncData, useNotebaseSnapshot } from "./lib"
 import { SrsSettingsDialog } from "./srs-settings-dialog"
 
@@ -364,6 +365,7 @@ export function ReviewSection() {
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>{i18n.t("notebase.review.cardProgress", [index + 1, queue.length])}</span>
             <div className="flex items-center gap-2">
+              <SpeakButton text={currentCard.front} />
               <Button
                 type="button"
                 variant="ghost"

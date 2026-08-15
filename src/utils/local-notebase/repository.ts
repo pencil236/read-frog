@@ -191,6 +191,9 @@ export class LocalNotebaseRepositoryImpl implements LocalNotebaseRepository {
       cards: [],
       revlogs: [],
     }
+    if (templates.length > 0) {
+      generateCardsForRows(snapshot, rows, templates)
+    }
     await this.store.saveSnapshot(snapshot)
     return notebase
   }
@@ -309,6 +312,7 @@ export class LocalNotebaseRepositoryImpl implements LocalNotebaseRepository {
         updatedAt: now,
       }))
       snapshot.rows.push(...created)
+      generateCardsForRows(snapshot, created, snapshot.templates)
       return created
     })
   }
@@ -465,43 +469,7 @@ export class LocalNotebaseRepositoryImpl implements LocalNotebaseRepository {
       const templates = templateId
         ? snapshot.templates.filter((template) => template.id === templateId)
         : snapshot.templates
-      const now = new Date()
-      let created = 0
-
-      for (const template of templates) {
-        for (const row of snapshot.rows) {
-          const exists = snapshot.cards.some(
-            (card) => card.notebaseRowId === row.id && card.templateId === template.id,
-          )
-          if (exists) {
-            continue
-          }
-          const { front, back } = renderCard(template, row, snapshot.columns)
-          snapshot.cards.push({
-            id: getRandomUUID(),
-            notebaseId,
-            notebaseRowId: row.id,
-            templateId: template.id,
-            variantKey: `${row.id}:${template.id}`,
-            state: "new",
-            scheduleStatus: "new",
-            dueAt: now,
-            lastReviewTime: null,
-            stability: 0,
-            difficulty: 0,
-            step: 0,
-            lapses: 0,
-            reps: 0,
-            buriedAt: null,
-            front,
-            back,
-            createdAt: now,
-            updatedAt: now,
-          })
-          created += 1
-        }
-      }
-      return { created }
+      return { created: generateCardsForRows(snapshot, snapshot.rows, templates) }
     })
   }
 
@@ -696,6 +664,60 @@ function renderCard(
     front: renderPattern(template.config.frontPattern, row.cells, columns),
     back: renderPattern(template.config.backPattern, row.cells, columns),
   }
+}
+
+/**
+ * Creates cards for rows that do not yet have one per template. Idempotent:
+ * rows already paired with a template are skipped. Used by createNotebase and
+ * createRows so newly saved words become reviewable cards immediately, and by
+ * generateCards for explicit regeneration.
+ */
+function generateCardsForRows(
+  snapshot: LocalNotebaseSnapshot,
+  rows: LocalNotebaseRow[],
+  templates: LocalCardTemplate[],
+): number {
+  const now = new Date()
+  let created = 0
+
+  for (const template of templates) {
+    for (const row of rows) {
+      const exists = snapshot.cards.some(
+        (card) => card.notebaseRowId === row.id && card.templateId === template.id,
+      )
+      if (exists) {
+        continue
+      }
+      const { front, back } = renderCard(template, row, snapshot.columns)
+      if (!front.trim()) {
+        continue
+      }
+      snapshot.cards.push({
+        id: getRandomUUID(),
+        notebaseId: snapshot.notebase.id,
+        notebaseRowId: row.id,
+        templateId: template.id,
+        variantKey: `${row.id}:${template.id}`,
+        state: "new",
+        scheduleStatus: "new",
+        dueAt: now,
+        lastReviewTime: null,
+        stability: 0,
+        difficulty: 0,
+        step: 0,
+        lapses: 0,
+        reps: 0,
+        buriedAt: null,
+        front,
+        back,
+        createdAt: now,
+        updatedAt: now,
+      })
+      created += 1
+    }
+  }
+
+  return created
 }
 
 export async function createDefaultLocalNotebaseStore(): Promise<LocalNotebaseStore> {
