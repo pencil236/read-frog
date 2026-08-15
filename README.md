@@ -23,10 +23,36 @@ A fork of [Read Frog](https://github.com/mengxi-ream/read-frog) that adds a full
 
 ## 📥 Download & install
 
-Grab the package from [GitHub Releases][github-release-link]:
+All packages are on [GitHub Releases][github-release-link]. Pick the method that fits you:
 
-- **Standard zip**: unzip → open `chrome://extensions` (Edge: `edge://extensions`) → enable **Developer mode** → **Load unpacked** → select the `read-frog-local` folder.
-- **Double-click launcher**: unzip → launch the browser from `启动ReadFrog-Chrome.bat` / `启动ReadFrog-Edge.bat` each time — no developer mode needed.
+| Method                                | Best for                            | Admin?     | Internet?                 | Result                                                                                                                   |
+| ------------------------------------- | ----------------------------------- | ---------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| ① Double-click launcher               | Friends/family, restricted networks | No         | No                        | Launch the browser from the `.bat` script and the extension is active. Opening the browser normally does not include it. |
+| ② Load unpacked (developer mode)      | Your own everyday browser           | No         | No                        | Load once, then the extension stays across restarts — no reinstall. Only needs the developer-mode toggle once.           |
+| ③ Persistent policy install (Windows) | Companies / batch rollout           | Yes (once) | Yes (needs GitHub access) | Force-installed: present on every launch, updates automatically.                                                         |
+
+### ① Double-click launcher
+
+1. Download `read-frog-local-1.45.3.zip` and unzip it to a fixed location.
+2. Double-click `启动ReadFrog-Chrome.bat` (Chrome) or `启动ReadFrog-Edge.bat` (Edge).
+3. The browser opens with the extension loaded. (Browsers don't allow extensions on the built-in new-tab page — that notice is normal; just close that tab.)
+
+### ② Load unpacked — recommended for personal use
+
+1. Unzip the package to get the `read-frog-local` folder.
+2. Open `chrome://extensions` (Edge: `edge://extensions`).
+3. Enable **Developer mode** (top-right).
+4. Click **Load unpacked** and select the `read-frog-local` folder.
+5. The extension stays installed across restarts; you may turn Developer mode off afterwards.
+
+### ③ Persistent policy install (Windows)
+
+1. Download `read-frog-常驻安装版.zip` and unzip it.
+2. Double-click `安装.bat` and allow the administrator prompt.
+3. Restart the browser — the extension is force-installed and present on every launch, with automatic updates.
+4. To uninstall, double-click `卸载.bat`.
+
+> Note: installs and updates require the browser to reach GitHub. If the network cannot, host `update.xml` and `read-frog.crx` on any reachable HTTPS server and edit the URLs in `install-policy.reg`.
 
 ## 🔗 Links
 
