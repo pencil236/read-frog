@@ -57,6 +57,19 @@ interface ProtocolMap {
     folderChosen: boolean
     location: string | null
   }>
+  // Internal: the background forwards directory-backed writes to the offscreen
+  // document, because the File System Access API is unavailable in service
+  // workers even for extension-origin handles.
+  localNotebaseOffscreenCreate: (data: {
+    name: string
+    columns: Array<{ name: string; type: string }>
+    results: Array<Record<string, unknown>>
+    templateName?: string
+  }) => Promise<{ notebaseId: string; location: string | null }>
+  localNotebaseOffscreenAppend: (data: {
+    notebaseId: string
+    results: Array<Record<string, unknown>>
+  }) => Promise<{ created: number; location: string | null }>
   // config
   getInitialConfig: () => Config | null
   // translation state
