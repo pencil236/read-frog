@@ -112,6 +112,32 @@ beforeEach(async () => {
   toastManagerMock.add.mockClear()
   toastManagerMock.close.mockClear()
   vi.mocked(sendMessage).mockClear()
+  vi.mocked(sendMessage).mockImplementation((async (type: string, data: any) => {
+    // Mirror the background message handlers: content scripts must route
+    // storage writes through the extension origin.
+    const repository = createLocalNotebaseRepository()
+    if (type === "localNotebaseCreate") {
+      const notebase = await repository.createNotebase({
+        name: data.name,
+        columns: data.columns.map((field: { name: string; type: string }) => ({
+          name: field.name,
+          config: { type: field.type },
+        })),
+        initialRows: data.results.map((cells: Record<string, unknown>) => ({ cells })),
+        createDefaultTemplate: true,
+        templateName: data.templateName ?? data.name,
+      })
+      return { notebaseId: notebase.id, location: null }
+    }
+    if (type === "localNotebaseAppendRows") {
+      const rows = await repository.createRows(
+        data.notebaseId,
+        data.results.map((cells: Record<string, unknown>) => ({ cells })),
+      )
+      return { created: rows.length, location: null }
+    }
+    return undefined
+  }) as unknown as typeof sendMessage)
   storageAdapterMock.get.mockClear()
   storageAdapterMock.set.mockClear()
   storageAdapterMock.setMeta.mockClear()

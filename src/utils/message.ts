@@ -39,6 +39,20 @@ interface ProtocolMap {
           | "requires-extension-user-action"
       }
   >
+  // local notebase
+  // Content scripts must route storage through the background: their
+  // IndexedDB is scoped to the embedding page's origin, while the notebase
+  // page (and the chosen directory handle) live in the extension origin.
+  localNotebaseCreate: (data: {
+    name: string
+    columns: Array<{ name: string; type: string }>
+    results: Array<Record<string, unknown>>
+    templateName?: string
+  }) => Promise<{ notebaseId: string; location: string | null }>
+  localNotebaseAppendRows: (data: {
+    notebaseId: string
+    results: Array<Record<string, unknown>>
+  }) => Promise<{ created: number; location: string | null }>
   // config
   getInitialConfig: () => Config | null
   // translation state

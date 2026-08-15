@@ -7,8 +7,6 @@ import { useRef, useState } from "react"
 import { toastManager } from "@/components/ui/base-ui/toast"
 import { getLocalNotebaseDetailUrl } from "@/utils/constants/local-notebase"
 import { i18n } from "@/utils/i18n"
-import { getStoredDirectoryLocation } from "@/utils/local-notebase"
-import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
 import { sendMessage } from "@/utils/message"
 import { saveToNotebaseDialogAtom } from "./save-to-notebase-dialog-atom"
 
@@ -36,8 +34,7 @@ export function useSaveToNotebase() {
   const [isPreparingSave, setIsPreparingSave] = useState(false)
   const savingNotebaseNameRef = useRef<string | undefined>(undefined)
 
-  const handleSaveSuccess = async (notebaseId: string, name: string) => {
-    const location = await getStoredDirectoryLocation()
+  const handleSaveSuccess = (notebaseId: string, name: string, location: string | null) => {
     const toastId = toastManager.add({
       type: "success",
       title: i18n.t("action.saveToNotebaseSuccess"),
@@ -74,14 +71,13 @@ export function useSaveToNotebase() {
       notebaseId: string
       results: Array<Record<string, unknown>>
     }) => {
-      const repository = await getLocalNotebaseRepository()
-      return repository.createRows(
+      return sendMessage("localNotebaseAppendRows", {
         notebaseId,
-        results.map((cells) => ({ cells })),
-      )
+        results,
+      })
     },
-    onSuccess: (_rows, variables) => {
-      void handleSaveSuccess(variables.notebaseId, savingNotebaseNameRef.current ?? "")
+    onSuccess: (result, variables) => {
+      handleSaveSuccess(variables.notebaseId, savingNotebaseNameRef.current ?? "", result.location)
     },
     onError: handleSaveError,
   })

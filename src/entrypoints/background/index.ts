@@ -27,6 +27,7 @@ import { setupEdgeTTSMessageHandlers } from "./edge-tts"
 import { setupHostedAiStatusHandler } from "./hosted-ai-status"
 import { setupIframeInjection } from "./iframe-injection"
 import { setupLLMGenerateTextMessageHandlers } from "./llm-generate-text"
+import { setupLocalNotebaseMessageHandlers } from "./local-notebase"
 import { initMockData } from "./mock-data"
 import { newUserGuide } from "./new-user-guide"
 import { proxyFetch } from "./proxy-fetch"
@@ -124,6 +125,7 @@ export default defineBackground({
     // the SW so wake-triggering messages are never dropped during init.
     setUpWebPageTranslationQueue()
     setUpSubtitlesTranslationQueue()
+    setupLocalNotebaseMessageHandlers()
     void setUpDatabaseCleanup()
     setUpConfigBackup()
 

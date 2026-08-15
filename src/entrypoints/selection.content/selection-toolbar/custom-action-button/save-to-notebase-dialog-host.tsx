@@ -21,9 +21,6 @@ import {
   replaceSelectionToolbarAction,
 } from "@/utils/custom-actions"
 import { i18n } from "@/utils/i18n"
-import { getStoredDirectoryLocation } from "@/utils/local-notebase"
-import { createColumnConfig } from "@/utils/local-notebase/render"
-import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
 import { logger } from "@/utils/logger"
 import { sendMessage } from "@/utils/message"
 import { getUniqueName } from "@/utils/name"
@@ -79,21 +76,15 @@ export function SaveToNotebaseDialogHost() {
       action: ReturnType<typeof getSelectionToolbarActions>[number]
       results: Array<Record<string, unknown>>
     }) => {
-      const repository = await getLocalNotebaseRepository()
-      const columns = action.outputSchema.map((field) => ({
-        name: field.name,
-        config: createColumnConfig(field.type),
-      }))
-      const notebase = await repository.createNotebase({
+      const { notebaseId, location } = await sendMessage("localNotebaseCreate", {
         name: action.name.trim() || action.name,
-        columns,
-        initialRows: results.map((cells) => ({ cells })),
-        createDefaultTemplate: true,
+        columns: action.outputSchema.map((field) => ({ name: field.name, type: field.type })),
+        results,
         templateName: action.name.trim() || action.name,
       })
-      return { notebaseId: notebase.id, action }
+      return { notebaseId, location, action }
     },
-    onSuccess: async ({ notebaseId, action }) => {
+    onSuccess: async ({ notebaseId, location, action }) => {
       const draft = pendingSave?.actionDraft
       const existingAction = findSelectionToolbarAction(selectionToolbarConfig, action.id)
       const nextAction = {
@@ -112,7 +103,6 @@ export function SaveToNotebaseDialogHost() {
       await setSelectionToolbarConfig(nextSelectionToolbar)
 
       closeDialog()
-      const location = await getStoredDirectoryLocation()
       toastManager.add({
         type: "success",
         title: i18n.t("action.saveToNotebaseSuccess"),
