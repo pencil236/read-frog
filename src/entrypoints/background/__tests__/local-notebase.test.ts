@@ -35,6 +35,19 @@ describe("setupLocalNotebaseMessageHandlers", () => {
     await Promise.all(localNotebaseDb.tables.map((table) => table.clear()))
   })
 
+  it("reports folderChosen=false when no storage folder is set", async () => {
+    setupLocalNotebaseMessageHandlers()
+    const status = handlers.get("localNotebaseGetStorageStatus")
+    expect(status).toBeDefined()
+
+    const result = (await status!({ data: undefined })) as {
+      folderChosen: boolean
+      location: string | null
+    }
+    expect(result.folderChosen).toBe(false)
+    expect(result.location).toBeNull()
+  })
+
   it("reuses an existing notebase with the same name instead of creating a duplicate", async () => {
     setupLocalNotebaseMessageHandlers()
     const create = handlers.get("localNotebaseCreate")

@@ -116,6 +116,9 @@ beforeEach(async () => {
     // Mirror the background message handlers: content scripts must route
     // storage writes through the extension origin.
     const repository = createLocalNotebaseRepository()
+    if (type === "localNotebaseGetStorageStatus") {
+      return { folderChosen: true, location: null }
+    }
     if (type === "localNotebaseCreate") {
       const notebase = await repository.createNotebase({
         name: data.name,
@@ -152,15 +155,22 @@ describe("saveToNotebaseButton (local)", () => {
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("action.saveToNotebase") }))
 
-    expect(
-      screen.getByRole("heading", { name: i18n.t("action.saveToNotebaseCreateTitle") }),
-    ).toBeDefined()
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: i18n.t("action.saveToNotebaseCreateTitle") }),
+      ).toBeDefined()
+    })
   })
 
   it("creates a local notebase and saves the result on confirm", async () => {
     await setup(createAction(), { Term: "hello", Definition: "你好" })
 
     fireEvent.click(screen.getByRole("button", { name: i18n.t("action.saveToNotebase") }))
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: i18n.t("action.saveToNotebaseCreateTitle") }),
+      ).toBeDefined()
+    })
     fireEvent.click(
       screen.getByRole("button", { name: i18n.t("action.saveToNotebaseCreateAndSaveShort") }),
     )
@@ -227,5 +237,27 @@ describe("saveToNotebaseButton (local)", () => {
       screen.queryByRole("heading", { name: i18n.t("action.saveToNotebaseCreateTitle") }),
     ).toBeNull()
     expect(toastManagerMock.add).toHaveBeenCalledWith(expect.objectContaining({ type: "success" }))
+  })
+
+  it("refuses to save until a storage folder is chosen", async () => {
+    vi.mocked(sendMessage).mockImplementationOnce((async () => ({
+      folderChosen: false,
+      location: null,
+    })) as unknown as typeof sendMessage)
+    await setup(createAction(), { Term: "hello" })
+
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("action.saveToNotebase") }))
+
+    await waitFor(() => {
+      expect(toastManagerMock.add).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: "error",
+          description: i18n.t("action.saveToNotebaseFolderRequired"),
+        }),
+      )
+    })
+    expect(
+      screen.queryByRole("heading", { name: i18n.t("action.saveToNotebaseCreateTitle") }),
+    ).toBeNull()
   })
 })

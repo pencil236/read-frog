@@ -7,3 +7,7 @@ export function getLocalNotebaseDetailUrl(notebaseId?: string): string {
   const pageUrl = browser.runtime.getURL(LOCAL_NOTEBASE_PAGE_PATH)
   return notebaseId ? `${pageUrl}#/notebases/${encodeURIComponent(notebaseId)}` : pageUrl
 }
+
+export function getLocalNotebaseStorageUrl(): string {
+  return `${browser.runtime.getURL(LOCAL_NOTEBASE_PAGE_PATH)}#/storage`
+}

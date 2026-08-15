@@ -1198,6 +1198,8 @@ action:
   saveToNotebaseSaving: Saving...
   saveToNotebaseSuccess: Saved to Notebase
   saveToNotebaseFailed: Failed to save to Notebase
+  saveToNotebaseFolderRequired: Choose a storage folder first in Notebase → Storage, then save again.
+  openStorageSettings: Open Storage settings
   saveToNotebaseLoginRequired: Log in on readfrog.app to save to Notebase
   saveToNotebaseAccessDenied: This account cannot access the selected Notebase
   saveToNotebaseLimitExceeded: Upgrade is required to save more Notebase notes

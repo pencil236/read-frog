@@ -1,6 +1,9 @@
 import { createColumnConfig } from "@/utils/local-notebase/render"
 import { getLocalNotebaseRepository } from "@/utils/local-notebase/repository"
-import { getStoredDirectoryLocation } from "@/utils/local-notebase/storage/directory"
+import {
+  getStoredDirectoryHandle,
+  getStoredDirectoryLocation,
+} from "@/utils/local-notebase/storage/directory"
 import { onMessage } from "@/utils/message"
 
 /**
@@ -11,6 +14,14 @@ import { onMessage } from "@/utils/message"
  * context on the same store (and the user-chosen directory handle).
  */
 export function setupLocalNotebaseMessageHandlers() {
+  onMessage("localNotebaseGetStorageStatus", async () => {
+    const handle = await getStoredDirectoryHandle()
+    return {
+      folderChosen: handle !== null,
+      location: await getStoredDirectoryLocation(),
+    }
+  })
+
   onMessage("localNotebaseCreate", async (message) => {
     const { name, columns, results, templateName } = message.data
     const repository = await getLocalNotebaseRepository()

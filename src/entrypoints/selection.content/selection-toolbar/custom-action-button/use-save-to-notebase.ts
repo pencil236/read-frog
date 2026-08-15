@@ -5,7 +5,10 @@ import { useMutation } from "@tanstack/react-query"
 import { useSetAtom } from "jotai"
 import { useRef, useState } from "react"
 import { toastManager } from "@/components/ui/base-ui/toast"
-import { getLocalNotebaseDetailUrl } from "@/utils/constants/local-notebase"
+import {
+  getLocalNotebaseDetailUrl,
+  getLocalNotebaseStorageUrl,
+} from "@/utils/constants/local-notebase"
 import { i18n } from "@/utils/i18n"
 import { sendMessage } from "@/utils/message"
 import { saveToNotebaseDialogAtom } from "./save-to-notebase-dialog-atom"
@@ -60,6 +63,24 @@ export function useSaveToNotebase() {
     })
   }
 
+  const handleFolderRequired = () => {
+    const toastId = toastManager.add({
+      type: "error",
+      title: i18n.t("action.saveToNotebaseFailed"),
+      description: i18n.t("action.saveToNotebaseFolderRequired"),
+      actionProps: {
+        children: i18n.t("action.openStorageSettings"),
+        onClick: () => {
+          toastManager.close(toastId)
+          void sendMessage("openPage", {
+            url: getLocalNotebaseStorageUrl(),
+            active: true,
+          })
+        },
+      },
+    })
+  }
+
   const saveRowsMutation = useMutation({
     meta: {
       suppressToast: true,
@@ -85,6 +106,12 @@ export function useSaveToNotebase() {
   const save = async (request: SaveToNotebaseRequest): Promise<SaveToNotebaseOutcome> => {
     const { action, results, actionDraft, analyticsSource, analyticsProvider } = request
     if (results.length === 0) {
+      return "failed"
+    }
+
+    const storageStatus = await sendMessage("localNotebaseGetStorageStatus")
+    if (!storageStatus.folderChosen) {
+      handleFolderRequired()
       return "failed"
     }
 

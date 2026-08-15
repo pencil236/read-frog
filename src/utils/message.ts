@@ -53,6 +53,10 @@ interface ProtocolMap {
     notebaseId: string
     results: Array<Record<string, unknown>>
   }) => Promise<{ created: number; location: string | null }>
+  localNotebaseGetStorageStatus: () => Promise<{
+    folderChosen: boolean
+    location: string | null
+  }>
   // config
   getInitialConfig: () => Config | null
   // translation state

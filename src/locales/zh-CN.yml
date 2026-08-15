@@ -1198,6 +1198,8 @@ action:
   saveToNotebaseSaving: 保存中...
   saveToNotebaseSuccess: 已保存到笔记库
   saveToNotebaseFailed: 保存到笔记库失败
+  saveToNotebaseFolderRequired: 请先到“笔记库 → 存储”页面选择存储文件夹，然后再保存。
+  openStorageSettings: 前往存储设置
   saveToNotebaseLoginRequired: 请先在 readfrog.app 登录后再保存到笔记库
   saveToNotebaseAccessDenied: 当前账号无法访问选中的笔记库
   saveToNotebaseLimitExceeded: 需要升级后才能保存更多笔记库内容
